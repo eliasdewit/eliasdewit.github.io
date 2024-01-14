@@ -34,6 +34,12 @@
             <li>En ik speel accordeon.</li>
         </ul>
         <p>Bezoek ook eens de <a href="https://cleverweb.be">website van mijn vader</a>!</p>
-        <button style="background-color: #77b58b;">Home</button>
+        <button style="background-color: #77b58b;" id="home_knop">Home</button>
+        <script>
+            const h_knop = document.getElementById("home_knop");
+            h_knop.addEventListener('click', function(ev) {
+                window.location = "index.html";
+            });
+        </script>
     </body>
 </html>
