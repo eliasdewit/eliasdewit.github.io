@@ -10,7 +10,7 @@
         href="CSS/mijn_eerste_stylesheet.css"/>
         <link rel="icon" href="favicon.ico" />
     </head>
-    <body>
+    <body onload="NaamVragen()">
         <nav>
             <ul>
                 <li class="selected">Home</a></li>
@@ -24,5 +24,39 @@
         <h1>Home</h1>
         <p>Hallo ik ben <strong>Elias</strong>!</p>
         <p>En <strong>dit</strong> is mijn website.</p>
+        <script>
+            function getCookie(koekje) {
+                if (document.cookie.length > 0) {
+                    begin = document.cookie.indexOf(koekje+"=");
+                    if (begin != -1) {
+                        begin +=koekje.length+1;
+                        end = document.cookie.indexOf(";", begin);
+                        if (end == -1) end = document.cookie.length;
+                        return unescape(document.cookie.substring(begin, end));
+                    }
+                    return null;
+                }
+            }
+            function setCookie(koekje, Value, expiredays) {
+                var ExpireDate = new Date ();
+                ExpireDate.setTime(ExpireDate.getTime() + (expiredays * 24 * 3600 * 1000));
+                document.cookie = koekje + "=" + escape(Value) + ((expiredays == null) ? "" : "; expires=" + ExpireDate.toGMTString());
+            }
+            function delCookie(koekje) {
+                if (getCookie(koekje)) {
+                    document.cookie = koekje + "=" + "; expires= Mon, 11 Aug 2025 00:00:01 GMT";
+                }
+            }
+            function NaamVragen() {
+                var username=getCookie('username');
+                if (username!=null) {
+                    alert('Hallo '+username+' - leuk dat je er weer bent!')
+                }
+                else {
+                    username=prompt('Hallo - dit is uw eerste bezoek aan mijn website - vul aub uw naam in.',"");
+                    setCookie('username',username,365)
+                }
+            }
+        </script>
     </body>
 </html>

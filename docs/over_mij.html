@@ -9,6 +9,30 @@
         <link type="text/CSS" rel="stylesheet"
         href="CSS/mijn_eerste_stylesheet.css"/>
         <link rel="icon" href="favicon.ico" />
+        <script type="text/javascript">
+            function emailCloak() {
+                if (document.getElementById) {
+                    console.log("hallo");
+                    var alltags = document.all? document.all : document.
+                    getElementsByTagName("*");
+                    for (i=0; i < alltags.length; i++) {
+                        if (alltags[i].className == "emailCloak") {
+                            var oldText = alltags[i].firstChild;
+                            var emailAddress = alltags[i].firstChild.nodeValue;
+                            var user = emailAddress.substring(0, emailAddress.indexOf("("));
+                            var website = emailAddress.substring(emailAddress.indexOf("(")+4, emailAddress.length);
+                            var newText = user+"@"+website;
+                            var a = document.createElement("a");
+                            a.href = "mailto:"+newText;
+                            var address = document.createTextNode(newText);
+                            a.appendChild(address);
+                            alltags[i].replaceChild(a,oldText);
+                        }
+                    }
+                }
+            }
+            window.addEventListener('load', emailCloak);
+        </script>
     </head>
     <body>
         <nav>
@@ -34,7 +58,11 @@
             <li>En ik speel accordeon.</li>
         </ul>
         <p>Bezoek ook eens de <a href="https://cleverweb.be">website van mijn vader</a>!</p>
+        <p>mail mij!</p>
+        <span class="emailCloak">eliasdewit13(at)gmail.com</span>
+        <p>
         <button style="background-color: #77b58b;" id="home_knop">Home</button>
+        </p>
         <script>
             const h_knop = document.getElementById("home_knop");
             h_knop.addEventListener('click', function(ev) {
