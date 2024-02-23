@@ -1,0 +1,39 @@
+body {
+    background-color: black;
+}
+h1 {
+    color: white;
+    padding-left: 500px;
+}
+.o {
+    padding-left: 50%;
+}
+.v {
+    padding-left: 48%;
+}
+button {
+    box-shadow: 0 0 5px #0f0,
+    0 0 25px #0f0;
+}
+button:hover {
+    box-shadow: 0 0 5px #0f0,
+    0 0 25px #0f0, 0 0 50px #0f0,
+    0 0 100px #0f0, 0 0 200px #0f0;
+}
+h1 {
+    box-shadow: 0 0 5px #0f0,
+    0 0 25px #0f0;
+}
+h1:hover {
+    box-shadow: 0 0 5px #0f0,
+    0 0 25px #0f0, 0 0 50px #0f0,
+    0 0 100px #0f0, 0 0 200px #0f0;
+}
+body {
+    box-shadow: 0 0 5px#0f0;
+}
+body:hover {
+    box-shadow: 0 0 5px #0f0,
+    0 0 25px #0f0, 0 0 50px #0f0,
+    0 0 100px #0f0;
+}

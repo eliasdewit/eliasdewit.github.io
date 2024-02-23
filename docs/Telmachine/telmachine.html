@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <a><link rel="stylesheet" href="css.css"></a>
+        <script>
+            function optellen() {
+                var getal1 = prompt('Vul uw eerste getal in', 'getal 1');
+                var getal2 = prompt('Vul uw tweede getal in', 'getal 2');
+                var totaal = parseFloat(getal1) + parseFloat(getal2);
+                var tekst = getal1 + ' + ' + getal2 + ' = ' + totaal;
+                alert(tekst)
+            }
+            function aftrekken() {
+                var getal1 = prompt('Vul uw eerste getal in', 'getal 1');
+                var getal2 = prompt('Vul uw tweede getal in', 'getal 2');
+                var totaal = parseFloat(getal1) - parseFloat(getal2);
+                var tekst = getal1 + ' - ' + getal2 + ' = ' + totaal;
+                alert(tekst)
+            }
+            function vermenigvuldigen() {
+                var getal1 = prompt('Vul uw eerste getal in', 'getal 1');
+                var getal2 = prompt('Vul uw tweede getal in', 'getal 2');
+                var totaal = parseFloat(getal1) * parseFloat(getal2);
+                var tekst = getal1 + ' x ' + getal2 + ' = ' + totaal;
+                alert(tekst)
+            }
+            function delen() {
+                var getal1 = prompt('Vul uw eerste getal in', 'getal 1');
+                var getal2 = prompt('Vul uw tweede getal in', 'getal 2');
+                var totaal = parseFloat(getal1) / parseFloat(getal2);
+                var tekst = getal1 + ' : ' + getal2 + ' = ' + totaal;
+                alert(tekst)
+            }
+        </script>
+    </head>
+    <body>
+        <h1>De javascript telmachine</h1>
+        <p class="o">
+            <button onclick="optellen()">optellen</button>
+        </p>
+        <p class="o">
+            <button onclick="aftrekken()">aftrekken</button>
+        </p>
+        <p class="v">
+            <button onclick="vermenigvuldigen()">vermenigvuldigen</button>
+        </p>
+        <p class="o">
+            <button onclick="delen()">delen</button>
+        </p>
+    </body>
+</html>
