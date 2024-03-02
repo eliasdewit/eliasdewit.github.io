@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <link rel="stylesheet" href="Css.css">
+    </head>
+    <body>
+        <header>
+            <h1>Hallo Sofie</h1>
+            <div id="nav">
+                <button id="drop">Menu</button>
+            
+                <ul class="menu" id="menu">
+                    <li><a href="IndexSofie.html">Home</a></li>
+                    <li><a href="tekenen.html">Tekenen</a></li>
+                </ul>
+            </div>
+        </header>
+        <section>
+            <div class="rij">
+                <div class="kader">
+                    <h1 style="padding-bottom: 20px;">Opwarming van de dag:</h1>
+                    <iframe class="videospeler" id="v_0" width="560" height="315" src="https://www.youtube.com/embed/bvxjdfs7jjY?si=IJp7T2DH8lOQ3p4V" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+                    <iframe class="videospeler" id="v_1" width="560" height="315" src="https://www.youtube.com/embed/WRQ8_oVt9nM?si=pTqZoMadpMbtSd0r" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+                    <iframe class="videospeler" id="v_2" width="560" height="315" src="https://www.youtube.com/embed/s6TUkkZoEDw?si=07_KJSQb68pepY-z" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+                    <iframe class="videospeler" id="v_3" width="560" height="315" src="https://www.youtube.com/embed/hSaXBVYVcQg?si=U3lq-LqE_6459tDZ" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+                    <iframe class="videospeler" id="v_4" width="560" height="315" src="https://www.youtube.com/embed/3sWBc3qUet0?si=m9O6eB8URhD1y8qj" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+                    <iframe class="videospeler" id="v_5" width="560" height="315" src="https://www.youtube.com/embed/d0wIBdAH914?si=VemVSBP9J7SjCg_7" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+                    <iframe class="videospeler" id="v_6" width="460" height="215" src="https://www.youtube.com/embed/uHOn3xB6h1g?si=glaRDXcNtD9mPUN7" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+                </div>
+                <div class="kader">
+                    <h1>Tekening van de dag:</h1>
+                    <p class="Tekenen" id="t_0">filmpersonage</p>
+                    <p class="Tekenen" id="t_1">dino</p>
+                    <p class="Tekenen" id="t_2">zoogdier</p>
+                    <p class="Tekenen" id="t_3">plant</p>
+                    <p class="Tekenen" id="t_4">mens</p>
+                    <p class="Tekenen" id="t_5">vervoersmiddel</p>
+                    <p class="Tekenen" id="t_6">fantasiedier</p>
+                </div>
+            </div>
+            <div class="rij">
+                <div class="kader">
+                    <button onclick="window.location='https://www.proko.com/'">proko</button>
+                    <button onclick="window.location='https://www.21-draw.com/'">21Draw</button>
+                    <button onclick="window.location='https://line-of-action.com/'">line of action</button>
+                    <button onclick="window.location='https://sketchfab.com/'">sketchfab</button>
+                    <button onclick="window.location='https://www.creativebloq.com/'">creativebloq</button>
+                    <button onclick="window.location='https://artwod.com/art-workouts-aspiring-artists'">artwod</button>
+                </div>
+            </div>
+        </section>
+        <script>
+            var knopje = document.getElementById("drop");
+            var vandaag = new Date();
+            var weekdag = vandaag.getDay()
+            document.getElementById("v_" + weekdag.toString()).style.display = 'block';
+            document.getElementById("t_" + weekdag.toString()).style.display = 'block';
+            var zichtbaar = false;
+            knopje.addEventListener('click', function() {
+                if (zichtbaar) {
+                    document.getElementById('menu').style.display = 'none';
+                    zichtbaar = false;
+                } else {
+                    document.getElementById('menu').style.display = 'block';
+                    zichtbaar = true
+                }
+            });
+        </script>
+    </body>
+</html>

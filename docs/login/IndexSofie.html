@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <link rel="stylesheet" href="Css.css">
+    </head>
+    <body>
+        <header>
+            <h1>Hallo Sofie</h1>
+            <div id="nav">
+                <button id="drop">Menu</button>
+            
+                <ul class="menu" id="menu">
+                    <li><a href="IndexSofie.html">Home</a></li>
+                    <li><a href="tekenen.html">Tekenen</a></li>
+                </ul>
+            </div>
+        </header>
+        <script>
+            var knopje = document.getElementById("drop");
+            var zichtbaar = false;
+            knopje.addEventListener('click', function() {
+                if (zichtbaar) {
+                    document.getElementById('menu').style.display = 'none';
+                    zichtbaar = false;
+                } else {
+                    document.getElementById('menu').style.display = 'block';
+                    zichtbaar = true;
+                }
+            });
+        </script>
+    </body>
+</html>
