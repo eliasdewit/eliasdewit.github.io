@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>clicker</title>
+        <style>
+            img {
+                height: 100px;
+                padding-left: 50%;
+                padding-top: 10px;
+                padding-bottom: 10px;
+            }
+            body {
+                background-color: rgb(94, 167, 79);
+            }
+            .button {
+                text-align: center;
+            }
+            div {
+                background-color: black;
+            }
+            .score {
+                background-color: brown;
+                color: white;
+            }
+        </style>
+    </head>
+    <body>
+        <p>
+            <span id="score" class="score">0$</span>
+        </p>
+        <p><img src="acorn.svg" id="clicker"></p>
+        <div style="display: flex; align-items: flex-end; background: none;">
+            <div style="flex: 1 0 0; background: none;"></div>
+            <div style="flex: 0 0 200px; height: 200px; overflow-y: scroll;">
+                <p class="button"><button id="x2">+1 - 50$</button></p>
+                <p class="button"><button id="auto">auto clicker - 100$</button></p>
+                <p class="button"><button id="mr clicker">MR.clicker +5 - 500$</button></p>
+                <p class="button"><button id="auto2">auto clicker2 +6 - 1.100$</button></p>
+                <p class="button"><button id="mr clicker2">MR.clicker2 +100 - 12.000$</button></p>
+                <p class="button"><button id="auto3">auto clicker3 +110 - 36.000$</button></p>
+            </div>
+        </div>
+        <script>
+            const sleep = (delay) => new Promise((resolve) => setTimeout(resolve, delay))
+
+            var score = 0;
+            var aantal = 1;
+            var auto = 0;
+            var x2 = document.getElementById('x2');
+            var click = document.getElementById('clicker');
+            var s = document.getElementById('score');
+            var autoclicker = document.getElementById('auto');
+            var mrclicker = document.getElementById('mr clicker')
+            var auto2 = document.getElementById('auto2')
+            var auto3 = document.getElementById('auto3')
+            click.addEventListener('click', function() {
+                score = score + aantal;
+                s.innerHTML = score + "$";
+                click.style.height = "110px";
+                click.style.paddingTop = "5px";
+                click.style.paddingBottom = "5px";
+                setTimeout(herstelnootgrote, 100);
+            });
+            document.addEventListener("keydown", function(event) {
+                if (event.code === "Space") {
+                    score = score + aantal;
+                    s.innerHTML = score + "$";
+                    click.style.height = "110px";
+                    click.style.paddingTop = "5px";
+                    click.style.paddingBottom = "5px";
+                    setTimeout(herstelnootgrote, 100);
+                }
+            });
+            function herstelnootgrote() {
+                click.style.height = "100px";
+                click.style.paddingLeft = "50%";
+                click.style.paddingTop = "10px";
+                click.style.paddingBottom = "10px";
+            };
+            x2.addEventListener('click', function() {
+                if (score > 49) {
+                    score = score - 50;
+                    s.innerHTML = score +"$";
+                    aantal = aantal + 1;
+                }
+            });
+            autoclicker.addEventListener('click', function() {
+                if (score > 99) {
+                    score = score - 100;
+                    s.innerHTML = score + "$";
+                    auto = auto + 1;
+                }
+            });
+            mrclicker.addEventListener('click', function() {
+                if (score > 499) {
+                    score = score - 500;
+                    s.innerHTML = score + "$";
+                    aantal = aantal + 5;
+                }
+            });
+            auto2.addEventListener('click', function() {
+                if (score > 1099) {
+                    score = score - 1100;
+                    s.innerHTML = score +"$";
+                    auto = auto + 6;
+                }
+            });
+            auto3.addEventListener('click', function() {
+                if (score > 11999) {
+                    score = score - 12000;
+                    s.innerHTML = score +"$";
+                    aantal = aantal + 100;
+                }
+            });
+            auto2.addEventListener('click', function() {
+                if (score > 35999) {
+                    score = score - 36000;
+                    s.innerHTML = score +"$";
+                    auto = auto + 110;
+                }
+            });
+            function autoScore() {
+                score = score + auto;
+                setTimeout(autoScore, 1000);
+                s.innerHTML = score + "$"
+            };
+            setTimeout(autoScore, 1000);
+        </script>
+    </body>
+</html>

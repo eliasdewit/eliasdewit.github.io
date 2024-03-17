@@ -27,24 +27,23 @@ const userMessage = [
     ["ah", "ok", "oké", "leuk", "welkom"],
     ["bedankt dank je"],
     ["wat moet ik vandaag eten"],
-    ["broer"],
     ["wat", "waarom", "hoe", "waar", "wanneer"],
     ["corona", "covid19", "coronavirus"],
     ["jij bent grappig"],
     ["ik weet het niet"],
     ["saai"],
     ["ik ben moe"],
-    ["wat is jouw lievelingseten"],
-    ["vertel een grap", "vertel een mopje", "vertel een grapje"],
+    ["wat is jouw lievelingseten", "wat eet je het liefst"],
+    ["vertel een grap", "vertel een mopje", "vertel een grapje", "vertel een mopje"],
     ["wat is een dier"],
     ["ben je moe"],
-    ["wat is je lievelingsdier"]
+    ["wat is je lievelingsdier"],
   ];
   const botReply = [
     ["Hallo!", "Hoi!", "Hey!", "Hi!"],
     ["Oké"],
     ["Ja dat ben ik!"],
-    ["Sorry daarvoor. Maar ik vind je leuk kerel."],
+    ["Sorry daarvoor. Maar ik vind je leuk."],
     [
         "Goed hoe gaat het met jou?",
         "Best goed, hoe gaat het?",
@@ -69,22 +68,21 @@ const userMessage = [
     ["Vertel me een verhaal", "Vertel me een grap", "Vertel me over jezelf"],
     ["Graag gedaan"],
     ["Pizza", "balletjes in tomatensaus", "macaroni", "spagetti", "tortelini"],
-    ["Kerel!"],
     ["Ja?"],
     ["Blijf alsjeblieft thuis"],
     ["Blij Het te horen"],
     ["Zeg iets interessants"],
     ["Sorry daarvoor. Laten we praten!"],
-    ["Neem wat rust, kerel!"],
+    ["Neem wat rust!"],
     ["greookte zalm."],
     ["Waarom heeft de fiets nooit stress?Omdat hij altijd in de relaxstand staat!"],
     ["Een dier is een meercellig, levend organisme dat zich voedt met organisch materiaal, zuurstof ademt, en zich kan bewegen en reageren op zijn omgeving"],
     ["Nee, ik ben niet moe."],
-    ["een uil."]
+    ["een uil.🦉"]
   ];
   
   const alternative = [
-    "Sorry, wat zei je?",
+    "Sorry, ik begrijp het niet"
   ];
   
   const synth = window.speechSynthesis;
@@ -156,14 +154,14 @@ const userMessage = [
   function containMessageCheck(string) {
     let expectedReply = [
         [
-            "Tot ziens, kerel",
+            "Tot ziens!",
             "Dag, tot ziens!",
-            "Kerel, dag. Zorg in deze situatie voor je gezondheid."
+            "Zorg in deze situatie voor je gezondheid."
         ],
-        ["Goede nacht, kerel", "Heb een goede nachtrust", "Zoete dromen"],
+        ["Goede nacht!", "Heb een goede nachtrust", "Zoete dromen"],
         ["Een fijne avond!", "Ook een fijne avond", "Avond!"],
-        ["Goedemorgen, fijne dag!", "Goedemorgen kerel!"],
-        ["Goedemiddag", "Middag, kerel!", "Middag, kerel!"]
+        ["Goedemorgen, fijne dag!", "Goedemorgen!"],
+        ["Goedemiddag", "Middag!"]
     ];
     let expectedMessage = [
     ["dag", "tc", "wees voorzichtig"],
@@ -197,4 +195,33 @@ const userMessage = [
     var scroll = document.getElementById("message-section");
     scroll.scrollTop = scroll.scrollHeight;
     voiceControl(product);
+  }
+  function optellen() {
+    var getal1 = prompt('Vul uw eerste getal in', 'getal 1');
+    var getal2 = prompt('Vul uw tweede getal in', 'getal 2');
+    var totaal = parseFloat(getal1) + parseFloat(getal2);
+    var tekst = getal1 + ' + ' + getal2 + ' = ' + totaal;
+    alert(tekst);
+    return "BOE!";
+  }
+  function aftrekken() {
+    var getal1 = prompt('Vul uw eerste getal in', 'getal 1');
+    var getal2 = prompt('Vul uw tweede getal in', 'getal 2');
+    var totaal = parseFloat(getal1) - parseFloat(getal2);
+    var tekst = getal1 + ' - ' + getal2 + ' = ' + totaal;
+    alert(tekst)
+  }
+  function vermenigvuldigen() {
+    var getal1 = prompt('Vul uw eerste getal in', 'getal 1');
+    var getal2 = prompt('Vul uw tweede getal in', 'getal 2');
+    var totaal = parseFloat(getal1) * parseFloat(getal2);
+    var tekst = getal1 + ' x ' + getal2 + ' = ' + totaal;
+    alert(tekst)
+  }
+  function delen() {
+    var getal1 = prompt('Vul uw eerste getal in', 'getal 1');
+    var getal2 = prompt('Vul uw tweede getal in', 'getal 2');
+    var totaal = parseFloat(getal1) / parseFloat(getal2);
+    var tekst = getal1 + ' : ' + getal2 + ' = ' + totaal;
+    alert(tekst)
   }
