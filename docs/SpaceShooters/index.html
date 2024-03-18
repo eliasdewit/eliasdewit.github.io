@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <script src="//cdn.jsdelivr.net/npm/phaser@3.11.0/dist/phaser.js"></script>
+    </head>
+    <body>
+        <script>
+            class Bullet extends Phaser.Physics.Arcade.Sprite {
+                constructor (scene, x, y) {
+                    super(scene, x, y, 'bullet');
+                }
+
+                fire (x, y, s) {
+                    this.body.reset(x, y);
+                    this.setActive(true);
+                    this.setVisible(true);
+                    this.setVelocityX(s);
+                }
+
+                kill () {
+                    this.setActive(false);
+                    this.setVisible(false);
+                }
+
+                preUpdate (time, delta) {
+                    super.preUpdate(time, delta);
+                    if (this.x <= -32 || this.x > 832) {
+                        this.kill();
+                    }
+                }
+            }
+
+            class Bullets extends Phaser.Physics.Arcade.Group {
+                constructor (scene) {
+                    super(scene.physics.world, scene);
+                    this.createMultiple({
+                        frameQuantity: 300,
+                        key: 'bullet',
+                        active: false,
+                        visible: false,
+                        classType: Bullet
+                    });
+                }
+
+                fireBullet (x, y, s) {
+                    let bullet = this.getFirstDead(false);
+                    if (bullet) {
+                        bullet.fire(x, y, s);
+                    }
+                }
+
+                killAll() {
+                    this.bullet(function (c) { c.kill(); });
+                }
+            }
+            function killplayer1() {
+                alert('player2 wint!');
+                bullets.killAll();
+                bullets.disableBody(true, true);
+                Location.reload(true)
+            }
+            function killplayer2() {
+                alert('player1 wint!');
+                bullets.killAll();
+                bullets.disableBody(true, true);
+                Location.reload(true)
+            }
+
+            var config = {
+                type: Phaser.AUTO,
+                width: 800,
+                height: 600,
+                physics: {
+                    default: 'arcade',
+                    arcade: {
+                        debug: false
+                    }
+                },
+                scene: {
+                    preload: preload,
+                    create: create,
+                    update: update
+                }
+            };
+
+            var game = new Phaser.Game(config);
+            var cursors;
+            var keys;
+            var bullets;
+            var tijd1 = null;
+            var tijd2 = null;
+
+            function preload() {
+                this.load.image('player1', 'player1.png');
+                this.load.image('player2', 'player2.png');
+                this.load.image('sky', 'achtergrond.png');
+            };
+            function create() {
+                this.add.image(400, 300, 'sky');
+                player1 = this.physics.add.sprite(800 -32, 600 -48, 'player1');
+                player2 = this.physics.add.sprite(32, 48, 'player2');
+                cursors = this.input.keyboard.createCursorKeys();
+                keys = this.input.keyboard.addKeys('I,J,N,A,Q,W,D,M')
+                player1.setCollideWorldBounds(true);
+                player2.setCollideWorldBounds(true);
+                bullets = new Bullets(this);
+                this.physics.add.overlap(player1, bullets, killplayer1);
+                this.physics.add.overlap(player2, bullets, killplayer2);
+            };
+            function update() {
+                document.getElementById('resetButton').addEventListener('click', create);
+                if (keys.I.isDown){
+                    player1.setVelocityY(-330);
+                }
+                else if (keys.N.isDown){
+                    player1.setVelocityY(330);
+                }
+                else {
+                    player1.setVelocityY(0);
+                }
+                if (keys.J.isDown){
+                    console.log();
+                    if (tijd1 == null || Date.now() - tijd1 > 500) {
+                        bullets.fireBullet(player1.x - 40, player1.y, -200);
+                        tijd1 = Date.now();
+                    }
+                }
+                if (keys.A.isDown){
+                    player2.setVelocityY(-330);
+                }
+                else if (keys.W.isDown){
+                    player2.setVelocityY(330);
+                }
+                else {
+                    player2.setVelocityY(0);
+                }
+                if (keys.Q.isDown){
+                    console.log();
+                    if (tijd2 == null || Date.now() - tijd2 > 500) {
+                        bullets.fireBullet(player2.x + 40, player2.y, 200);
+                        tijd2 = Date.now();
+                    }
+                }
+            };
+        </script>
+    </body>
+</html>
