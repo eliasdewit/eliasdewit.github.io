@@ -108,7 +108,6 @@
                 this.physics.add.overlap(player2, bullets, killplayer2);
             };
             function update() {
-                document.getElementById('resetButton').addEventListener('click', create);
                 if (keys.I.isDown){
                     player1.setVelocityY(-330);
                 }
