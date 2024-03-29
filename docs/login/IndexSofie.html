@@ -7,7 +7,7 @@
         <header>
             <h1>Hallo Sofie</h1>
             <div id="nav">
-                <button id="drop">Menu</button>
+                <button id="drop"><img id="knop" src="menu.svg"></button>
             
                 <ul class="menu" id="menu">
                     <li><a href="IndexSofie.html">Home</a></li>
@@ -21,9 +21,11 @@
             knopje.addEventListener('click', function() {
                 if (zichtbaar) {
                     document.getElementById('menu').style.display = 'none';
+                    document.getElementById('knop').src = 'menu.svg';
                     zichtbaar = false;
                 } else {
                     document.getElementById('menu').style.display = 'block';
+                    document.getElementById('knop').src = 'close.svg';
                     zichtbaar = true;
                 }
             });

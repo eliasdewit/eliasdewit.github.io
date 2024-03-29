@@ -8,11 +8,11 @@
         <header>
             <h1>Hallo Sofie</h1>
             <div id="nav">
-                <button id="drop">Menu</button>
+                <button id="drop"><img src="menu.svg"></button>
             
                 <ul class="menu" id="menu">
-                    <li><a href="IndexSofie.html"><img title="Home" src="website.gif" style="height: 40px;"></a></li>
-                    <li><a href="tekenen.html"><img title="Tekenen" src="edit.gif" style="height: 40px;"></a></li>
+                    <li><a href="IndexSofie.html">Home</a></li>
+                    <li><a href="tekenen.html">Tekenen</a></li>
                 </ul>
             </div>
         </header>
@@ -61,10 +61,12 @@
             knopje.addEventListener('click', function() {
                 if (zichtbaar) {
                     document.getElementById('menu').style.display = 'none';
+                    document.getElementById('knop').src = 'menu.svg';
                     zichtbaar = false;
                 } else {
                     document.getElementById('menu').style.display = 'block';
-                    zichtbaar = true
+                    document.getElementById('knop').src = 'close.svg';
+                    zichtbaar = true;
                 }
             });
         </script>
