@@ -6,15 +6,12 @@
     <body>
         <script>
             class Bullet extends Phaser.Physics.Arcade.Sprite {
-                constructor (scene, x, y) {
-                    super(scene, x, y, 'bullet');
-                }
-
-                fire (x, y, s) {
+                fire (x, y, s, richting) {
                     this.body.reset(x, y);
                     this.setActive(true);
                     this.setVisible(true);
                     this.setVelocityX(s);
+                    this.setVelocityY(richting * 50);
                 }
 
                 kill () {
@@ -29,23 +26,33 @@
                     }
                 }
             }
+            class Bullet1 extends Bullet {
+                constructor (scene, x, y) {
+                    super(scene, x, y, 'bullet1');
+                }
+            }
+            class Bullet2 extends Bullet {
+                constructor (scene, x, y) {
+                    super(scene, x, y, 'bullet2');
+                }
+            }
 
             class Bullets extends Phaser.Physics.Arcade.Group {
-                constructor (scene) {
+                constructor (scene, key, class_type) {
                     super(scene.physics.world, scene);
                     this.createMultiple({
                         frameQuantity: 300,
-                        key: 'bullet',
+                        key: key,
                         active: false,
                         visible: false,
-                        classType: Bullet
+                        classType: class_type
                     });
                 }
 
-                fireBullet (x, y, s) {
+                fireBullet (x, y, s, richting) {
                     let bullet = this.getFirstDead(false);
                     if (bullet) {
-                        bullet.fire(x, y, s);
+                        bullet.fire(x, y, s, richting);
                     }
                 }
 
@@ -53,18 +60,35 @@
                     this.bullet(function (c) { c.kill(); });
                 }
             }
+            class Bullets1 extends Bullets {
+                constructor (scene) {
+                    super(scene, 'bullet1', Bullet1);
+                }
+            }
+            class Bullets2 extends Bullets {
+                constructor (scene) {
+                    super(scene, 'bullet2', Bullet2);
+                }
+            }
+
+            var einde = false;
+            const urlParams = new URLSearchParams(window.location.search);
+            const inst_color = urlParams.get('color');
+            console.log(inst_color);
+
             function killplayer1() {
-                alert('player2 wint!');
-                window.location='index.html'
-                bullets.killAll();
-                bullets.disableBody(true, true);
-                Location.reload(true)
+                if (einde == false) {
+                    alert('player2 wint!');
+                    einde = true;
+                    window.location='index.html'
+                }
             }
             function killplayer2() {
-                alert('player1 wint!');
-                bullets.killAll();
-                bullets.disableBody(true, true);
-                Location.reload(true)
+                if (einde == false) {
+                    alert('player1 wint!');
+                    einde = true;
+                    window.location='index.html'
+                }
             }
 
             var config = {
@@ -87,13 +111,40 @@
             var game = new Phaser.Game(config);
             var cursors;
             var keys;
-            var bullets;
+            var bullets1;
+            var bullets2;
             var tijd1 = null;
             var tijd2 = null;
+            var richting1 = null;
+            var richting2 = null;
 
             function preload() {
-                this.load.image('player1', 'player1.png');
-                this.load.image('player2', 'player2.png');
+                if (inst_color == 'B.-R.') {
+                    this.load.image('bullet1', 'bulletb.png');
+                    this.load.image('bullet2', 'bulletr.png');
+                    this.load.image('player1', 'playerb.png');
+                    this.load.image('player2', 'playerr.png');
+                } else if (inst_color == 'P.-L.G.') {
+                    this.load.image('bullet1', 'bulletp.png');
+                    this.load.image('bullet2', 'bulletlg.png');
+                    this.load.image('player1', 'playerp.png');
+                    this.load.image('player2', 'playerlg.png');
+                } else if (inst_color == 'B.-G.') {
+                    this.load.image('bullet1', 'bulletb.png');
+                    this.load.image('bullet2', 'bulletg.png');
+                    this.load.image('player1', 'playerb.png');
+                    this.load.image('player2', 'playerg.png');
+                } else if (inst_color == 'R.-G.') {
+                    this.load.image('bullet1', 'bulletr2.png');
+                    this.load.image('bullet2', 'bulletg.png');
+                    this.load.image('player1', 'playerr2.png');
+                    this.load.image('player2', 'playerg.png');
+                } else {
+                    this.load.image('bullet1', 'bulletb.png');
+                    this.load.image('bullet2', 'bulletr.png');
+                    this.load.image('player1', 'playerb.png');
+                    this.load.image('player2', 'playerr.png');
+                } 
                 this.load.image('sky', 'achtergrond.png');
             };
             function create() {
@@ -104,40 +155,47 @@
                 keys = this.input.keyboard.addKeys('I,J,N,A,Q,W,D,M')
                 player1.setCollideWorldBounds(true);
                 player2.setCollideWorldBounds(true);
-                bullets = new Bullets(this);
-                this.physics.add.overlap(player1, bullets, killplayer1);
-                this.physics.add.overlap(player2, bullets, killplayer2);
+                bullets1 = new Bullets1(this);
+                bullets2 = new Bullets2(this);
+                this.physics.add.overlap(player1, bullets2, killplayer1);
+                this.physics.add.overlap(player2, bullets1, killplayer2);
             };
             function update() {
                 if (keys.I.isDown){
                     player1.setVelocityY(-330);
+                    richting1 = -1;
                 }
                 else if (keys.N.isDown){
                     player1.setVelocityY(330);
+                    richting1 = 1;
                 }
                 else {
                     player1.setVelocityY(0);
+                    richting1 = 0;
                 }
                 if (keys.J.isDown){
                     console.log();
                     if (tijd1 == null || Date.now() - tijd1 > 500) {
-                        bullets.fireBullet(player1.x - 40, player1.y, -200);
+                        bullets1.fireBullet(player1.x - 40, player1.y, -200, richting1);
                         tijd1 = Date.now();
                     }
                 }
                 if (keys.A.isDown){
                     player2.setVelocityY(-330);
+                    richting2 = -1;
                 }
                 else if (keys.W.isDown){
                     player2.setVelocityY(330);
+                    richting2 = 1;
                 }
                 else {
                     player2.setVelocityY(0);
+                    richting2 = 0;
                 }
                 if (keys.Q.isDown){
                     console.log();
                     if (tijd2 == null || Date.now() - tijd2 > 500) {
-                        bullets.fireBullet(player2.x + 40, player2.y, 200);
+                        bullets2.fireBullet(player2.x + 40, player2.y, 200, richting2);
                         tijd2 = Date.now();
                     }
                 }
