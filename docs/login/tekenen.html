@@ -41,6 +41,48 @@
             </div>
             <div class="rij">
                 <div class="kader">
+                    <h1>huid en haar</h1>
+                    <h2>haar lengte</h2>
+                    <p id="hl"></p>
+                    <h2>haarkleur</h2>
+                    <p id="hk"></p>
+                </div>
+                <div class="kader">
+                    <h2>haar textuur</h2>
+                    <p id="ht"></p>
+                    <h2>huidtype</h2>
+                    <p id="hty"></p>
+                </div>
+                <div class="kader">
+                    <h1>kledij</h1>
+                    <h2>onderkant</h2>
+                    <p id="ko"></p>
+                    <h2>bovenkant</h2>
+                    <p id="kb"></p>
+                </div>
+                <div class="kader">
+                    <h2>buitenkledij</h2>
+                    <p id="bk"></p>
+                    <h2>schoenen</h2>
+                    <p id="s"></p>
+                </div>
+                <div class="kader">
+                    <h1>accessoires</h1>
+                    <h2>hoofddeksel</h2>
+                    <p id="h"></p>
+                    <h2>juwelen</h2>
+                    <p id="j"></p>
+                </div>
+                <div class="kader">
+                    <h2>dragen</h2>
+                    <p id="d"></p>
+                    <h2>meenemen</h2>
+                    <p id="m"></p>
+                </div>
+            </div>
+
+            <div class="rij">
+                <div class="kader">
                     <button onclick="window.location='https://www.proko.com/'">proko</button>
                     <button onclick="window.location='https://www.21-draw.com/'">21Draw</button>
                     <button onclick="window.location='https://line-of-action.com/'">line of action</button>
@@ -52,7 +94,19 @@
             </div>
         </section>
         <script>
+            var hl = document.getElementById('hl')
+            var hk = document.getElementById('hk')
+            var ht = document.getElementById('ht')
+            var hty = document.getElementById('hty')
             var knopje = document.getElementById("drop");
+            var ko = document.getElementById('ko')
+            var kb = document.getElementById('kb')
+            var bk = document.getElementById('bk')
+            var s = document.getElementById('s')
+            var h = document.getElementById('h')
+            var j = document.getElementById('j')
+            var d = document.getElementById('d')
+            var m = document.getElementById('m')
             var vandaag = new Date();
             var weekdag = vandaag.getDay()
             document.getElementById("v_" + weekdag.toString()).style.display = 'block';
@@ -69,6 +123,93 @@
                     zichtbaar = true;
                 }
             });
+            function getRandomInt(max) {
+                return Math.floor(Math.random() * max);
+            }
+            var kijk = getRandomInt(6);
+            if (kijk == 0) {hl.innerHTML = 'lang';}
+            else if (kijk == 1) {hl.innerHTML = 'medium';}
+            else if (kijk == 2) {hl.innerHTML = 'kort';}
+            else if (kijk == 3) {hl.innerHTML = 'terugwijkend';}
+            else if (kijk == 4) {hl.innerHTML = 'kort geschoren';}
+            else if (kijk == 5) {hl.innerHTML = 'geknipt haar';}
+            kijk = getRandomInt(6);
+            if (kijk == 0) {hk.innerHTML = 'bruin';}
+            else if (kijk == 1) {hk.innerHTML = 'zwart';}
+            else if (kijk == 2) {hk.innerHTML = 'blond';}
+            else if (kijk == 3) {hk.innerHTML = 'kastanjebruin';}
+            else if (kijk == 4) {hk.innerHTML = 'rood';}
+            else if (kijk == 5) {hk.innerHTML = 'zilver';}
+            kijk = getRandomInt(6);
+            if (kijk == 0) {ht.innerHTML = 'recht/stijl';}
+            else if (kijk == 1) {ht.innerHTML = 'losse golven';}
+            else if (kijk == 2) {ht.innerHTML = 'strakke golven';}
+            else if (kijk == 3) {ht.innerHTML = 'krullend';}
+            else if (kijk == 4) {ht.innerHTML = 'kronkelig (afro)';}
+            else if (kijk == 5) {ht.innerHTML = 'kinky';}
+            kijk = getRandomInt(6);
+            if (kijk == 0) {hty.innerHTML = 'donker';}
+            else if (kijk == 1) {hty.innerHTML = 'medium';}
+            else if (kijk == 2) {hty.innerHTML = 'olijf';}
+            else if (kijk == 3) {hty.innerHTML = 'brons';}
+            else if (kijk == 4) {hty.innerHTML = 'blank';}
+            else if (kijk == 5) {hty.innerHTML = 'bleek';}
+            kijk = getRandomInt(6);
+            if (kijk == 0) {ko.innerHTML = 'jeans';}
+            else if (kijk == 1) {ko.innerHTML = 'rok';}
+            else if (kijk == 2) {ko.innerHTML = 'sportshort';}
+            else if (kijk == 3) {ko.innerHTML = 'olifanten pijpen';}
+            else if (kijk == 4) {ko.innerHTML = 'overall';}
+            else if (kijk == 5) {ko.innerHTML = 'korte broek';}
+            kijk = getRandomInt(6);
+            if (kijk == 0) {kb.innerHTML = 't-shirt';}
+            else if (kijk == 1) {kb.innerHTML = 'hemd';}
+            else if (kijk == 2) {kb.innerHTML = 'crop top';}
+            else if (kijk == 3) {kb.innerHTML = 'topje of marcelleke';}
+            else if (kijk == 4) {kb.innerHTML = 'tuniek';}
+            else if (kijk == 5) {kb.innerHTML = 'sweater';}
+            kijk = getRandomInt(6);
+            if (kijk == 0) {bk.innerHTML = 'regenjas';}
+            else if (kijk == 1) {bk.innerHTML = 'blazer';}
+            else if (kijk == 2) {bk.innerHTML = 'jeansvest';}
+            else if (kijk == 3) {bk.innerHTML = 'vest (cardigan)';}
+            else if (kijk == 4) {bk.innerHTML = 'peacoat';}
+            else if (kijk == 5) {bk.innerHTML = 'hoodie';}
+            kijk = getRandomInt(6);
+            if (kijk == 0) {s.innerHTML = 'laarzen';}
+            else if (kijk == 1) {s.innerHTML = 'sneakers';}
+            else if (kijk == 2) {s.innerHTML = 'pumps';}
+            else if (kijk == 3) {s.innerHTML = 'sandalen';}
+            else if (kijk == 4) {s.innerHTML = 'platte schoenen';}
+            else if (kijk == 5) {s.innerHTML = 'kostuum schoenen';}
+            kijk = getRandomInt(6);
+            if (kijk == 0) {h.innerHTML = 'hoed';}
+            else if (kijk == 1) {h.innerHTML = 'baret';}
+            else if (kijk == 2) {h.innerHTML = 'muts';}
+            else if (kijk == 3) {h.innerHTML = 'zonnehoed';}
+            else if (kijk == 4) {h.innerHTML = 'haarband';}
+            else if (kijk == 5) {h.innerHTML = 'haarspeld';}
+            kijk = getRandomInt(6);
+            if (kijk == 0) {j.innerHTML = 'halsketting';}
+            else if (kijk == 1) {j.innerHTML = 'armband';}
+            else if (kijk == 2) {j.innerHTML = 'oorringen';}
+            else if (kijk == 3) {j.innerHTML = 'uurwerk';}
+            else if (kijk == 4) {j.innerHTML = 'piercing';}
+            else if (kijk == 5) {j.innerHTML = 'ring';}
+            kijk = getRandomInt(6);
+            if (kijk == 0) {d.innerHTML = 'bril';}
+            else if (kijk == 1) {d.innerHTML = 'hoge sokken';}
+            else if (kijk == 2) {d.innerHTML = 'das';}
+            else if (kijk == 3) {d.innerHTML = 'tattoos';}
+            else if (kijk == 4) {d.innerHTML = 'sjaal';}
+            else if (kijk == 5) {d.innerHTML = 'riem';}
+            kijk = getRandomInt(6);
+            if (kijk == 0) {m.innerHTML = 'zak of rugzak';}
+            else if (kijk == 1) {m.innerHTML = 'muziekinstrument';}
+            else if (kijk == 2) {m.innerHTML = 'boek';}
+            else if (kijk == 3) {m.innerHTML = 'drinken';}
+            else if (kijk == 4) {m.innerHTML = 'camera';}
+            else if (kijk == 5) {m.innerHTML = 'ipad';}
         </script>
     </body>
 </html>

@@ -31,6 +31,11 @@
                     super(scene, x, y, 'bullet1');
                 }
             }
+            class Bullet1mega extends Bullet {
+                constructor (scene, x, y) {
+                super(scene, x, y, 'bullet1');
+                }
+            }
             class Bullet2 extends Bullet {
                 constructor (scene, x, y) {
                     super(scene, x, y, 'bullet2');
@@ -70,7 +75,11 @@
                     super(scene, 'bullet2', Bullet2);
                 }
             }
-
+            class Bullets1mega extends Bullets {
+                constructor (scene) {
+                    super(scene, 'bullet1mega', Bullet1mega);
+                }
+            }
             var einde = false;
             const urlParams = new URLSearchParams(window.location.search);
             const inst_color = urlParams.get('color');
@@ -113,15 +122,18 @@
             var keys;
             var bullets1;
             var bullets2;
+            var bullets1mega;
             var tijd1 = null;
             var tijd2 = null;
             var richting1 = null;
             var richting2 = null;
-
+            var box;
+            var mega;
             function preload() {
                 if (inst_color == 'B.-R.') {
                     this.load.image('bullet1', 'bulletb.png');
                     this.load.image('bullet2', 'bulletr.png');
+                    this.load.image('bullet1mega', 'bulletbm.png');
                     this.load.image('player1', 'playerb.png');
                     this.load.image('player2', 'playerr.png');
                 } else if (inst_color == 'P.-L.G.') {
@@ -146,19 +158,29 @@
                     this.load.image('player2', 'playerr.png');
                 } 
                 this.load.image('sky', 'achtergrond.png');
+                this.load.image('box', 'box.png');
             };
             function create() {
                 this.add.image(400, 300, 'sky');
                 player1 = this.physics.add.sprite(800 -32, 600 -48, 'player1');
                 player2 = this.physics.add.sprite(32, 48, 'player2');
                 cursors = this.input.keyboard.createCursorKeys();
-                keys = this.input.keyboard.addKeys('I,J,N,A,Q,W,D,M')
+                keys = this.input.keyboard.addKeys('I,J,N,A,Q,W,D,M,S,H')
                 player1.setCollideWorldBounds(true);
                 player2.setCollideWorldBounds(true);
                 bullets1 = new Bullets1(this);
                 bullets2 = new Bullets2(this);
+                bullets1mega = new Bullets1mega(this)
                 this.physics.add.overlap(player1, bullets2, killplayer1);
                 this.physics.add.overlap(player2, bullets1, killplayer2);
+                box = this.physics.add.sprite(Math.random() * 400 + 200,Math.random() * 500 + 50, 'box');
+                this.physics.add.overlap(box, bullets1, function()
+                {
+                    box.setActive(false);
+                    box.setVisible(false);
+                    box.x = -2000;
+                    mega = true;
+                });
             };
             function update() {
                 if (keys.I.isDown){
@@ -197,6 +219,12 @@
                     if (tijd2 == null || Date.now() - tijd2 > 500) {
                         bullets2.fireBullet(player2.x + 40, player2.y, 200, richting2);
                         tijd2 = Date.now();
+                    }
+                }
+                if (keys.H.isDown){
+                    if (mega == true) {
+                        bullets1mega.fireBullet(player1.x - 40, player1.y, -200, richting1);
+                        mega = false
                     }
                 }
             };
