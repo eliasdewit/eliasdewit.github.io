@@ -41,12 +41,21 @@
                 <p class="button"><button id="auto3">auto clicker3 +110 - 36.000$</button></p>
             </div>
         </div>
+        <button onclick="save">Save</button>
         <script>
+            var score = localStorage.getItem("Score");
+            var aantal = localStorage.getItem("Aantal");
+            var auto = localStorage.getItem("Auto")
             const sleep = (delay) => new Promise((resolve) => setTimeout(resolve, delay))
-
-            var score = 0;
-            var aantal = 1;
-            var auto = 0;
+            if (score == null) {
+                score = 0
+            };
+            if (aantal == null) {
+                aantal = 1;
+            };
+            if (auto == null) {
+                auto = 0
+            };
             var x2 = document.getElementById('x2');
             var click = document.getElementById('clicker');
             var s = document.getElementById('score');
@@ -126,6 +135,11 @@
                 s.innerHTML = score + "$"
             };
             setTimeout(autoScore, 1000);
+            function save() {
+                localStorage.setItem("Score", score);
+                localStorage.setItem("Aantal", aantal);
+                localStorage.setItem("Auto", auto);
+            }
         </script>
     </body>
 </html>
