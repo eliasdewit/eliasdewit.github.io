@@ -18,9 +18,9 @@ const userMessage = [
       "hoe noem jezelf",
       "wat is je naam",
       "hoe noem je",
-      "je naam"
+      "je naam",
     ],
-    ["ik houd van je"],
+    ["ik houd van je", "ik vind jouw leuk"],
     ["blij", "goed", "leuk", "geweldig", "fantastisch", "cool", "zeer goed"],
     ["slecht", "verveeld", "moe"],
     ["help me", "vertel me een verhaal", "vertel me een grapje"],
