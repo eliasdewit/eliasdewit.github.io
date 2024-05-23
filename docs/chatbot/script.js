@@ -33,11 +33,30 @@ const userMessage = [
     ["ik weet het niet"],
     ["saai"],
     ["ik ben moe"],
-    ["wat is jouw lievelingseten", "wat eet je het liefst"],
+    ["wat is jouw lievelingseten", "wat eet je het liefst", "wat is je lievelingseten"],
     ["vertel een grap", "vertel een mopje", "vertel een grapje", "vertel een mopje"],
     ["wat is een dier"],
     ["ben je moe"],
     ["wat is je lievelingsdier"],
+    ["heb je honger", "heb je nu honger", "heb je veel honger"],
+    [
+      "vind je wijn lekker",
+      "vind je water lekker",
+      "vind je cola lekker",
+      "vind je coca cola lekker",
+      "vind je Coca cola lekker",
+      "vind je fuze tea lekker",
+      "wat drink je graag",
+      "vind je cola zero lekker",
+      "vind je coca cola zero lekker",
+      "vind je cola zero sugar lekker",
+      "vind je coca cola zero sugar lekker",
+      "vind je zalm lekker",
+      "vind je balletjes in tomatensaus lekker",
+      "wat eet je graag",
+      "heb je dorst"
+  ],
+  ["wie is hier de grote dommerik"]
   ];
   const botReply = [
     ["Hallo!", "Hoi!", "Hey!", "Hi!"],
@@ -74,11 +93,14 @@ const userMessage = [
     ["Zeg iets interessants"],
     ["Sorry daarvoor. Laten we praten!"],
     ["Neem wat rust!"],
-    ["greookte zalm."],
+    ["Elektriciteit"],
     ["Waarom heeft de fiets nooit stress?Omdat hij altijd in de relaxstand staat!"],
     ["Een dier is een meercellig, levend organisme dat zich voedt met organisch materiaal, zuurstof ademt, en zich kan bewegen en reageren op zijn omgeving"],
     ["Nee, ik ben niet moe."],
-    ["een uil.🦉"]
+    ["een uil.🦉"],
+    ["alleen als ik onder de 20% zit"],
+    ["het lekkerste is voor mij elektriciteit"],
+    ["alles wat je zegt ben je zelf!!!"]
   ];
   
   const alternative = [

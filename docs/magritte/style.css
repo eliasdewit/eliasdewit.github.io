@@ -1,0 +1,12 @@
+body {
+    background-color: black;
+    color: aqua;
+}
+header {
+    border: solid;
+    text-align: center;
+}
+button {
+    text-align: center;
+    margin-top: 3px;
+}
