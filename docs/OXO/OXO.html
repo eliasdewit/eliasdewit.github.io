@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset=UTF-8>
+    </head>
+    <body>
+        <h2 style="margin-left: 10px;">OXO</h2>
+        <canvas id="canvas">
+
+        </canvas>
+        <script>
+            window.addEventListener('load', draw)
+
+            // CONSTANTEN
+
+            let CANVAS_BREETDE = 800;
+            let CANVAS_HOOGTE = 500;
+
+            // Canvas laden
+
+            let canvas = document.getElementById('canvas');
+            let c = canvas.getContext('2d');
+            canvas.width = CANVAS_BREETDE;
+            canvas.height = CANVAS_HOOGTE;
+            document.body.appendChild(canvas);
+
+            // tekenen
+
+            function draw() {
+                let hoogte = 100;
+                c.clearRect(0, 0, CANVAS_BREETDE, CANVAS_HOOGTE)
+                for (let i=0;i<2;i++) {
+                    c.strokeStyle = '#000000'
+                    c.beginPath()
+                    if (i == 0) {
+                        c.moveTo(10, 110)
+                        c.lineTo(300, 110)
+                    }else {
+                        c.moveTo(10, 10 + hoogte)
+                        c.lineTo(300, 10 + hoogte)
+                    }
+                    c.stroke()
+                    hoogte = hoogte + 100;
+                }
+                hoogte = 100
+                for (let i=0;i<2;i++) {
+                    c.strokeStyle = '#000000'
+                    c.beginPath()
+                    c.moveTo(hoogte, 10)
+                    c.lineTo(hoogte, 310)
+                    c.stroke()
+                    hoogte = hoogte + 100;
+                }
+            }
+
+            let beurt = 'c'
+            let eerste_nr;
+            let tweede_nr;
+            let kolommen = [];
+            for (let i=0; i<3; i++) {
+                kolommen.push([null, null, null])
+            }
+
+            function geklikt(canvas, event) {
+                const rect = canvas.getBoundingClientRect()
+                const x = event.clientX - rect.left
+                const y = event.clientY - rect.top
+                console.log("x: " + x + " y: " + y)
+
+                let midden_y = null;
+                let midden_X = null;
+
+                if (y > 10 && y < 101) {
+                    midden_y = 60;
+                    eerste_nr = 0;
+                } 
+                if (y > 110 && y < 211) {
+                    midden_y = 160
+                    eerste_nr = 1;
+                }
+                if (y > 210 && y < 311) {
+                    midden_y = 260
+                    eerste_nr = 2;
+                }
+
+
+
+                if (x > 9 && x < 101) {
+                    midden_X = 55
+                    tweede_nr = 0;
+                }
+                if (x > 109 && x < 201) {
+                    midden_X = 155
+                    tweede_nr = 1;
+                }
+                if (x > 209 && x < 301) {
+                    midden_X = 255
+                    tweede_nr = 2;
+                }
+
+
+
+                const radius = 40;
+
+                if (midden_X != null && midden_y != null) {
+                    if (kolommen[eerste_nr][tweede_nr] != 'X' && kolommen[eerste_nr][tweede_nr] != 'O') {
+                        if (beurt == 'c') {
+                            kolommen[eerste_nr][tweede_nr] = 'X'
+                            c.beginPath();
+                            c.arc(midden_X, midden_y, radius, 0, 2 * Math.PI, false);
+                            c.stroke();
+                            beurt = 'k'
+                            let winner = checkWinner(kolommen);
+                            if (winner) {
+                                if (winner === 'O') {
+                                    alert("De winnaar is: X");
+                                } else {
+                                    alert("De winnaar is: O")
+                                }
+                                window.location='index.html';
+                            } else {
+                                console.log("Er is geen winnaar.");
+                            }
+                        } else {
+                            if (beurt == 'k') {
+                                kolommen[eerste_nr][tweede_nr] = 'O'
+                                c.beginPath()
+                                c.moveTo(midden_X-40, midden_y-40)
+                                c.lineTo(40+midden_X, 40+midden_y)
+                                c.moveTo(midden_X-40, midden_y+40)
+                                c.lineTo(midden_X+40, midden_y-40)
+                                c.stroke()
+                                beurt = 'c'
+                                let winner = checkWinner(kolommen);
+                                if (winner) {
+                                    if (winner === 'O') {
+                                        alert("De winnaar is: X");
+                                    } else {
+                                        alert("De winnaar is: O")
+                                    }
+                                    
+                                } else {
+                                    console.log("Er is geen winnaar.");
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+
+            canvas.addEventListener('mousedown', function(e) {
+                geklikt(canvas, e)
+            })
+
+            function checkWinner() {
+                // Controleer rijen
+                for (let i = 0; i < 3; i++) {
+                    if (kolommen[i][0] === kolommen[i][1] && kolommen[i][1] === kolommen[i][2] && kolommen[i][0] !== '') {
+                        return kolommen[i][0];
+                    }
+                }
+
+                // Controleer kolommen
+                for (let i = 0; i < 3; i++) {
+                    if (kolommen[0][i] === kolommen[1][i] && kolommen[1][i] === kolommen[2][i] && kolommen[0][i] !== '') {
+                        return kolommen[0][i];
+                    }
+                }
+
+                // Controleer diagonalen
+                if (kolommen[0][0] === kolommen[1][1] && kolommen[1][1] === kolommen[2][2] && kolommen[0][0] !== '') {
+                    return kolommen[0][0];
+                }
+                if (kolommen[0][2] === kolommen[1][1] && kolommen[1][1] === kolommen[2][0] && kolommen[0][2] !== '') {
+                    return kolommen[0][2];
+                }
+
+                // Als er geen winnaar is, retourneer null
+                return null;
+            }
+        </script>
+    </body>
+</html>
