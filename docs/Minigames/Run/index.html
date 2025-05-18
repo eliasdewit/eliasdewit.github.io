@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="nl">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" href="style.css">
+        <title>Document</title>
+    </head>
+    <body>
+        <p>
+        </p>
+        <div id="p1"></div>
+        <div id="p2"></div>
+        <div id="p2wint"><h1>Player 2 wint!!!</h1><br><a href="https://eliasdewit.github.io/Minigames">Home</a></div>
+        <div id="p1wint"><h1>Player 1 wint!!!</h1><br><a href="https://eliasdewit.github.io/Minigames">Home</a></div>
+
+        <script>
+            // Spelers.
+            let p1 = document.getElementById('p1');
+            let p2 = document.getElementById('p2');
+
+            // Score van de spelers.
+            let scorep1 = document.getElementById('scorep1');
+            let scorep2 = document.getElementById('scorep2');
+
+            // Positie van de spelers.
+            let positiep1 = 10;
+            let positiep2 = 10;
+
+            function p1_naar_links() {
+                positiep1 += 20
+                p1.style.left = positiep1 + "px"
+                if (positiep1 > 1149) {
+                    p1wint.style.display = 'block'
+                }
+            }
+
+            function p2_naar_links() {
+                positiep2 += 20
+                p2.style.left = positiep2 + "px"
+                if (positiep2 > 1149) {
+                    p2wint.style.display = 'block'
+                }
+            }
+
+            // Als er op 'Q' wordt gedrukt, dan voer je functie 'p1_naar_links' uit.
+            document.addEventListener("keydown", function(event) {
+                if (positiep1 < 1150 && positiep2 < 1150) {
+                    if (event.repeat) { return }
+                    if (event.key === "q" || event.key === "Q") {
+                        p1_naar_links();
+                        console.log(positiep1)
+                    }
+                    else if (event.key === "m" || event.key === "M") {
+                        p2_naar_links();
+                    }
+                }
+            });
+
+        </script>
+    </body>
+</html>
