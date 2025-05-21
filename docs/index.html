@@ -1,109 +1,37 @@
 <!DOCTYPE html>
-<html>
+<html lang="nl">
     <head>
-        <title>Home</title>
-        <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
-        <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
-        <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
-        <link rel="manifest" href="/site.webmanifest">
-        <link type="text/CSS" rel="stylesheet"
-        href="CSS/mijn_eerste_stylesheet.css"/>
-        <link rel="icon" href="favicon.ico" />
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" href="style.css">
+        <link rel="icon" href="Profile.png">
+        <title>EliMine - Home</title>
     </head>
-    <body onload="NaamVragen()">
-        <svg height="130" width="500">
-            <defs>
-              <linearGradient id="grad1" x1="0%" y1="0%" x2="100%" y2="0%">
-                <stop offset="0%"
-                style="stop-color:rgb(0, 255, 68)" />
-                <stop offset="100%"
-                style="stop-color:#77b58b" />
-              </linearGradient>
-            </defs>
-            <ellipse cx="100" cy="70" rx="85" ry="55" fill="url(#grad1)" />
-            <text fill="#ffffff" font-size="45" font-family="Verdana"
-            x="50" y="86">EDW</text>
-          </svg>
-        <nav>
-            <ul>
-                <li class="selected"><script src="https://cdn.lordicon.com/lordicon.js"></script>
-                    <lord-icon
-                        src="https://cdn.lordicon.com/wmwqvixz.json"
-                        trigger="hover"
-                        style="width:20px;height:20px">
-                    </lord-icon>Home</a></li>
-                <li><a href="over_mij.html"><script src="https://cdn.lordicon.com/lordicon.js"></script>
-                    <lord-icon
-                        src="https://cdn.lordicon.com/iazmohzf.json"
-                        trigger="hover"
-                        style="width:20px;height:20px">
-                    </lord-icon>Over mij</a></li>
-                <li><a href="Scratch.html"><script src="https://cdn.lordicon.com/lordicon.js"></script>
-                    <lord-icon
-                        src="https://cdn.lordicon.com/pbyiftgw.json"
-                        trigger="hover"
-                        style="width:20px;height:20px">
-                    </lord-icon>Scratch</a></li>
-                <li><a href="mopjes.html"><script src="https://cdn.lordicon.com/lordicon.js"></script>
-                    <lord-icon
-                        src="https://cdn.lordicon.com/ctlnzcle.json"
-                        trigger="hover"
-                        colors="primary:#121331,secondary:#66ee78"
-                        style="width:20px;height:20px">
-                    </lord-icon>Mopjes</a></li>
-                <li><a href="https://eliasdewit.github.io/A-clikker/"><script src="https://cdn.lordicon.com/lordicon.js"></script>
-                    <lord-icon
-                        src="https://cdn.lordicon.com/pbyiftgw.json"
-                        trigger="hover"
-                        style="width:20px;height:20px">
-                    </lord-icon>A-clikker</a></li>
-                <li><a href="https://eliasdewit.github.io/Platformer-Game/"><script src="https://cdn.lordicon.com/lordicon.js"></script>
-                    <lord-icon
-                        src="https://cdn.lordicon.com/pbyiftgw.json"
-                        trigger="hover"
-                        style="width:20px;height:20px">
-                    </lord-icon>Platformer-Game</a></li>
-                <li><a href="Telmachine/telmachine.html">rekenmachine</a></li>
-                <li><a href="de_jongen_met_de_negen_wensen/index.html">De jongen met de...</a></li>
-            </ul>
-        </nav>
-        <h1>Home</h1>
-        <p>Hallo ik ben <strong>Elias</strong>!</p>
-        <p>En <strong>dit</strong> is mijn website.</p>
-        <script>
-            function getCookie(koekje) {
-                if (document.cookie.length > 0) {
-                    begin = document.cookie.indexOf(koekje+"=");
-                    if (begin != -1) {
-                        begin +=koekje.length+1;
-                        end = document.cookie.indexOf(";", begin);
-                        if (end == -1) end = document.cookie.length;
-                        return unescape(document.cookie.substring(begin, end));
-                    }
-                    return null;
-                }
-            }
-            function setCookie(koekje, Value, expiredays) {
-                var ExpireDate = new Date ();
-                ExpireDate.setTime(ExpireDate.getTime() + (expiredays * 24 * 3600 * 1000));
-                document.cookie = koekje + "=" + escape(Value) + ((expiredays == null) ? "" : "; expires=" + ExpireDate.toGMTString());
-            }
-            function delCookie(koekje) {
-                if (getCookie(koekje)) {
-                    document.cookie = koekje + "=" + "; expires= Mon, 11 Aug 2025 00:00:01 GMT";
-                }
-            }
-            function NaamVragen() {
-                var username=getCookie('username');
-                if (username!=null) {
-                    alert('Hallo '+username+' - leuk dat je er weer bent!')
-                }
-                else {
-                    username=prompt('Hallo - dit is uw eerste bezoek aan mijn website - vul aub uw naam in.',"");
-                    setCookie('username',username,365)
-                }
-            }
-        </script>
-        <a href="https://lordicon.com/">Icons by Lordicon.com</a>
+    <body>
+        <header>
+            <span>EliMine</span><img src="Profile.png">
+        </header>
+        <article>
+            <nav>
+                <h2>EliMine</h2>
+                <a href="index.html">Home</a><br>
+                <a href="Video's.html">Mijn video's</a><br>
+                <a href="Survival_tips.html">Survival tips</a>
+            </nav>
+            <div>
+                <p>
+                    <ul>    
+                        <h2>Home</h2><br>
+                        Beste kijkers,<br>
+                        <br>
+                        Ik ben EliMine.<br>
+                        Op deze website vind je meer informatie over Minecraft,<br>
+                        je vindt er extra tips en trucs<br>
+                        en video's over Minecraft<br>
+                        Vind mij op <a href="https://www.youtube.com/@EliMine-z6q">YouTube</a>.
+                    </ul>
+                </p>
+            </div>
+        </article>
     </body>
 </html>
