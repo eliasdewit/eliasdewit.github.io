@@ -1,621 +1,375 @@
 <!DOCTYPE html>
 <html lang="nl">
-    <head>
-        <meta charset="UTF-8">
-        <title>Chess - Bauhaus Style</title>
-        <link rel="stylesheet" href="style.css">
-        <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Noto+Serif+JP:wght@400;700&display=swap" rel="stylesheet">
-        <style>
-            body {
-                display: flex;
-                flex-direction: column;
-                justify-content: center;
-                align-items: center;
-                min-height: 100vh;
-                margin: 0;
-                background-color: #f0f0f0;
-                font-family: 'Archivo', sans-serif;
-            }
-            h1 {
-                font-size: 4rem;
-                text-transform: uppercase;
-                margin-bottom: 20px;
-                border-bottom: 8px solid #000;
-            }
-            #chessboard {
-                display: grid;
-                grid-template-columns: repeat(8, 60px);
-                grid-template-rows: repeat(8, 60px);
-                border: 10px solid #000;
-                box-shadow: 20px 20px 0px #ffcc00; /* Yellow Bauhaus shadow */
-                background-color: #000;
-                gap: 2px; /* Bauhaus lines between squares */
-            }
-            .square {
-                width: 60px;
-                height: 60px;
-                display: flex;
-                justify-content: center;
-                align-items: center;
-                font-size: 40px;
-                transition: transform 0.2s ease;
-            }
-            .square:hover {
-                transform: scale(1.05);
-                z-index: 10;
-            }
-            .selected {
-                background-color: #0000ff !important; /* Bauhaus Blue for selection */
-                box-shadow: inset 0 0 10px rgba(0,0,0,0.5);
-            }
-            .valid-move {
-                position: relative;
-            }
-            .valid-move::after {
-                content: '';
-                position: absolute;
-                width: 15px;
-                height: 15px;
-                background-color: rgba(0, 0, 0, 0.3);
-                border-radius: 50%;
-            }
-            .in-check {
-                background-color: #ff0000 !important;
-                animation: pulse-check 1s infinite alternate;
-                box-shadow: inset 0 0 20px #000;
-                z-index: 5;
-            }
-            @keyframes pulse-check {
-                from { opacity: 1; }
-                to { opacity: 0.6; }
-            }
-            
-            /* Schaakmat animatie Bauhaus */
-            #chessboard.style-bauhaus.checkmate .piece-king .shape {
-                animation: fade-out-king 2s forwards ease-in-out;
-            }
-            
-            #chessboard.style-bauhaus.checkmate .piece-king .shape::after {
-                animation: fade-out-king 2s forwards ease-in-out;
-            }
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Rubik's Pro Timer online</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        :root {
+            --cube-red: #B90000;
+            --cube-blue: #0046AD;
+            --cube-orange: #FF5800;
+            --cube-yellow: #FFD500;
+            --cube-green: #009B48;
+            --cube-white: #FFFFFF;
+            --bg-dark: #121212;
+            --panel-bg: #1e1e1e;
+        }
 
-            /* Bord bij schaakmat wordt rustig donkerder */
-            #chessboard.checkmate .square {
-                transition: background-color 2s ease;
-                opacity: 0.7;
-            }
-            
-            #chessboard.checkmate .square:not(.in-check) .piece {
-                opacity: 0.5;
-                transition: opacity 2s ease;
-            }
+        body {
+            font-family: 'Segoe UI', sans-serif;
+            background-color: var(--bg-dark);
+            color: var(--cube-white);
+            margin: 0;
+            padding: 10px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            touch-action: manipulation;
+        }
 
-            @keyframes fade-out-king {
-                0% { transform: scale(1); opacity: 1; }
-                100% { transform: scale(1.1); opacity: 0; filter: blur(5px); }
-            }
+        .main-wrapper {
+            display: flex;
+            gap: 15px;
+            width: 100%;
+            max-width: 1200px;
+            flex-direction: column;
+        }
 
-            .style-bauhaus .white {
-                background-color: #ffcc00; /* Bauhaus Yellow */
-            }
-            .style-bauhaus .black {
-                background-color: #ff0000; /* Bauhaus Red */
-            }
-            .style-bauhaus #chessboard {
-                border: 10px solid #000;
-                box-shadow: 20px 20px 0px #ffcc00;
-                gap: 2px;
-                background-color: #000;
-            }
+        @media (min-width: 900px) { .main-wrapper { flex-direction: row; } }
 
-            .piece {
-                width: 40px;
-                height: 40px;
-                display: flex;
-                justify-content: center;
-                align-items: center;
-                cursor: pointer;
-                user-select: none;
-                transition: transform 0.2s;
-                position: relative;
-            }
-            .white-piece .shape {
-                background-color: #0000ff; /* Bauhaus Blue */
-                border: 3px solid #000;
-            }
-            .black-piece .shape {
-                background-color: #ffffff; /* White for Black pieces to contrast on Red/Yellow */
-                border: 3px solid #000;
-            }
+        .panel {
+            background: var(--panel-bg);
+            border-radius: 15px;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.6);
+            border: 2px solid var(--cube-blue);
+        }
 
-            /* Geometrische vormen per stuk (alleen Bauhaus) */
-            .style-bauhaus .piece-pawn .shape {
-                width: 20px;
-                height: 20px;
-                border-radius: 50%;
-            }
-            .style-bauhaus .piece-rook .shape {
-                width: 30px;
-                height: 30px;
-            }
-            .style-bauhaus .piece-knight .shape {
-                width: 25px;
-                height: 35px;
-                clip-path: polygon(0% 0%, 70% 0%, 100% 30%, 100% 100%, 0% 100%);
-            }
-            .style-bauhaus .piece-bishop .shape {
-                width: 0;
-                height: 0;
-                background-color: transparent !important;
-                border: none !important;
-                border-left: 20px solid transparent;
-                border-right: 20px solid transparent;
-                border-bottom: 38px solid #000;
-                position: relative;
-                margin-bottom: 10px;
-            }
-            .style-bauhaus .piece-bishop .shape::before {
-                content: '';
-                position: absolute;
-                top: 4px;
-                left: -16px;
-                border-left: 16px solid transparent;
-                border-right: 16px solid transparent;
-                border-bottom: 30px solid transparent;
-                z-index: 1;
-            }
-            .style-bauhaus .white-piece.piece-bishop .shape::before {
-                border-bottom-color: #0000ff;
-            }
-            .style-bauhaus .black-piece.piece-bishop .shape::before {
-                border-bottom-color: #ffffff;
-            }
-            .style-bauhaus .piece-queen .shape {
-                width: 35px;
-                height: 35px;
-                border-radius: 50%;
-            }
-            .style-bauhaus .piece-king .shape {
-                width: 35px;
-                height: 35px;
-                position: relative;
-            }
-            .style-bauhaus .piece-king .shape::after {
-                content: '';
-                position: absolute;
-                top: 50%;
-                left: 50%;
-                transform: translate(-50%, -50%);
-                width: 15px;
-                height: 15px;
-                background-color: inherit;
-                border: 3px solid #000;
-            }
-            .square:hover .piece {
-                transform: scale(1.2) rotate(5deg);
-            }
-            /* Verwijder de extra accenten om alleen rood en geel te behouden */
-            /* Styling for the coordinates (if we add them later) */
-            .board-container {
-                position: relative;
-                padding: 20px;
-                background-color: #fff;
-                border: 4px solid #000;
-            }
-            
-            /* Layout voor bord en klok */
-            .main-container {
-                display: flex;
-                flex-direction: row;
-                align-items: center;
-                gap: 40px;
-                position: relative;
-                width: fit-content;
-            }
-            
-            .clocks-container {
-                display: flex;
-                flex-direction: column;
-                justify-content: space-between;
-                height: 520px;
-            }
-            
-            .left-panel, .right-panel {
-                display: flex;
-                flex-direction: column;
-                gap: 20px;
-                height: 520px;
-            }
+        .left-column { 
+            flex: 2; 
+            padding: 20px; 
+            border-top: 8px solid var(--cube-orange);
+            display: flex;
+            flex-direction: column;
+            cursor: pointer;
+            user-select: none;
+        }
 
-            #move-history {
-                flex-grow: 1;
-                width: 150px;
-                background-color: #fff;
-                border: 6px solid #000;
-                box-shadow: 10px 10px 0px #000;
-                display: flex;
-                flex-direction: column;
-                overflow: hidden;
-            }
+        .right-column { 
+            flex: 1; 
+            padding: 20px; 
+            max-height: 400px; 
+            overflow-y: auto; 
+            border-top: 8px solid var(--cube-green); 
+        }
 
-            .history-header {
-                background-color: #000;
-                color: #fff;
-                padding: 5px;
-                text-align: center;
-                font-weight: bold;
-                font-size: 0.9rem;
-            }
+        @media (min-width: 900px) { .right-column { max-height: 85vh; } }
 
-            #moves-list {
-                padding: 10px;
-                font-family: monospace;
-                font-size: 0.9rem;
-                overflow-y: auto;
-                max-height: 220px;
-            }
+        #scramble {
+            font-size: 1.1em;
+            text-align: center;
+            color: var(--cube-yellow);
+            font-weight: bold;
+            margin-bottom: 15px;
+            padding: 15px;
+            background: rgba(0,0,0,0.4);
+            border-radius: 10px;
+            min-height: 50px;
+            line-height: 1.4;
+        }
 
-            .move-row {
-                display: flex;
-                justify-content: space-between;
-                border-bottom: 1px solid #eee;
-                padding: 2px 0;
-            }
+        #timer-display {
+            font-family: 'Courier New', monospace;
+            font-size: 80px;
+            text-align: center;
+            margin: 30px 0;
+            font-weight: bold;
+        }
 
-            .move-number {
-                color: #888;
-                width: 25px;
-            }
+        @media (min-width: 600px) { #timer-display { font-size: 120px; } }
 
-            /* Japanse stijl voor zijpaneel */
-            .style-japanese #move-history {
-                background-color: #fcfaf2;
-                border-color: #bc4749;
-                box-shadow: 6px 6px 0px #2b2d42;
-            }
+        .timer-ready { color: var(--cube-green) !important; text-shadow: 0 0 20px var(--cube-green); }
+        .inspection { color: var(--cube-red); }
 
-            .style-japanese .history-header {
-                background-color: #bc4749;
-            }
+        .btn-inspection {
+            background: var(--cube-white);
+            color: black;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: bold;
+            margin: 0 auto 20px;
+            font-size: 1.1em;
+            transition: transform 0.1s;
+        }
+        .btn-inspection:active { transform: scale(0.95); }
 
-            .style-japanese #moves-list {
-                color: #2b2d42;
-            }
+        .stats-bar {
+            display: flex;
+            justify-content: space-around;
+            background: #2a2a2a;
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            border-bottom: 4px solid var(--cube-yellow);
+        }
 
-            .clock {
-                width: 150px;
-                padding: 20px;
-                background-color: #fff;
-                border: 6px solid #000;
-                box-shadow: 10px 10px 0px #000;
-                text-align: center;
-                transition: all 0.3s ease;
-            }
-            
-            /* Specifieke klok posities */
-            #black-clock {
-                margin-bottom: auto;
-            }
-            
-            #white-clock {
-                margin-top: auto;
-            }
-            
-            .white-timer {
-                border-color: #0000ff; /* Blauw voor wit's klok (Bauhaus kleur voor witte stukken) */
-            }
-            
-            .black-timer {
-                border-color: #000; /* Zwart voor zwart's klok */
-            }
-            
-            .clock.active {
-                transform: scale(1.1);
-                box-shadow: 15px 15px 0px #ff0000; /* Rood accent voor actieve beurt */
-            }
-            
-            .clock-label {
-                font-size: 1.2rem;
-                font-weight: bold;
-                margin-bottom: 10px;
-                border-bottom: 3px solid #000;
-            }
-            
-            .time {
-                font-size: 2.5rem;
-                font-weight: bold;
-            }
-            
-            /* Responsive aanpassing voor mobiel */
-            @media (max-width: 1000px) {
-                .main-container {
-                    flex-direction: column;
-                    gap: 20px;
-                }
-                .left-panel, .right-panel {
-                    height: auto;
-                    flex-direction: row;
-                    width: 100%;
-                    justify-content: center;
-                }
-                .clocks-container {
-                    height: auto;
-                    flex-direction: row;
-                    gap: 20px;
-                }
-                #move-history {
-                    width: 100%;
-                    max-height: 200px;
-                }
-            }
-            /* Startscherm Overlay */
-            .overlay {
-                position: fixed;
-                top: 0;
-                left: 0;
-                width: 100%;
-                height: 100%;
-                background-color: rgba(240, 240, 240, 0.95);
-                display: flex;
-                justify-content: center;
-                align-items: center;
-                z-index: 1000;
-            }
+        .stat-label { font-size: 10px; color: #888; text-transform: uppercase; }
 
-            .start-box {
-                background-color: #fff;
-                border: 10px solid #000;
-                padding: 40px;
-                box-shadow: 20px 20px 0px #ff0000;
-                text-align: center;
-            }
+        table { width: 100%; border-collapse: collapse; font-size: 0.9em; }
+        th { text-align: left; color: var(--cube-yellow); border-bottom: 2px solid #444; padding: 10px; }
+        td { padding: 12px 10px; border-bottom: 1px solid #333; }
+        
+        .action-btns { display: flex; gap: 5px; }
+        .plus2-btn { background: var(--cube-orange); border: none; color: white; padding: 5px 10px; border-radius: 4px; cursor: pointer; font-size: 0.8em; }
+        .dnf-btn { background: var(--cube-red); border: none; color: white; padding: 5px 10px; border-radius: 4px; cursor: pointer; font-size: 0.8em; }
+        .delete-btn { background: transparent; color: #666; border: none; cursor: pointer; font-size: 1.2em; padding-left: 10px; }
+        
+        .is-dnf { color: var(--cube-red) !important; text-decoration: line-through; }
+        .is-penalty { color: var(--cube-orange) !important; }
 
-            .start-box h2 {
-                margin-top: 0;
-                font-size: 3rem;
-            }
+        canvas { background: #111; border-radius: 10px; padding: 10px; width: 100% !important; }
+    </style>
+</head>
+<body>
 
-            .welcome-text {
-                color: #ff0000;
-                border-bottom: 6px solid #000;
-                padding-bottom: 10px;
-                margin-bottom: 20px !important;
-            }
-
-            .style-options {
-                display: flex;
-                gap: 20px;
-                justify-content: center;
-                margin-top: 20px;
-                margin-bottom: 30px;
-            }
-
-            .style-options button {
-                padding: 10px 20px;
-                font-size: 1.2rem;
-                font-family: 'Archivo', sans-serif;
-                font-weight: bold;
-                background-color: #fff;
-                border: 4px solid #000;
-                cursor: pointer;
-                transition: all 0.2s ease;
-            }
-
-            .style-options button.selected {
-                background-color: #000;
-                color: #fff;
-            }
-            
-            .time-options {
-                display: flex;
-                gap: 20px;
-                justify-content: center;
-                margin-top: 30px;
-            }
-
-            .time-options button {
-                padding: 15px 30px;
-                font-size: 1.5rem;
-                font-family: 'Archivo', sans-serif;
-                font-weight: bold;
-                background-color: #fff;
-                border: 4px solid #000;
-                cursor: pointer;
-                transition: all 0.2s ease;
-                text-transform: uppercase;
-            }
-
-            .time-options button:hover {
-                transform: scale(1.1);
-                box-shadow: 8px 8px 0px #0000ff;
-                background-color: #ffcc00;
-            }
-
-            .time-options button:active {
-                transform: scale(0.95);
-            }
-
-            /* Japanse Stijl */
-            .style-japanese .white {
-                background-color: #fcfaf2; /* Rijstpapier wit */
-                background-image: radial-gradient(circle, #fcfaf2 0%, #f4f1de 100%);
-            }
-            .style-japanese .black {
-                background-color: #bc4749; /* Japans rood / vermiljoen */
-                background-image: radial-gradient(circle, #bc4749 0%, #a21a1d 100%);
-            }
-            .style-japanese #chessboard {
-                border: 15px solid #2b2d42; /* Donker hout / zwart */
-                box-shadow: 0 0 40px rgba(0,0,0,0.4);
-                background-color: #2b2d42;
-                gap: 2px;
-            }
-            .style-japanese body {
-                background-color: #f4f1de;
-                background-image: url('https://www.transparenttextures.com/patterns/paper.png');
-                font-family: 'Noto Serif JP', serif;
-            }
-            .style-japanese .clock {
-                background-color: #fcfaf2;
-                border: 4px solid #bc4749;
-                border-radius: 2px;
-                box-shadow: 6px 6px 0px #2b2d42;
-                font-family: 'Noto Serif JP', serif;
-            }
-            .style-japanese .clock.active {
-                box-shadow: 0 0 20px #bc4749;
-                border-width: 6px;
-            }
-            .style-japanese .clock-label {
-                color: #bc4749;
-                border-bottom: 2px solid #2b2d42;
-            }
-            .style-japanese .overlay {
-                background-color: rgba(252, 250, 242, 0.9);
-            }
-            .style-japanese .start-box {
-                background-color: #fcfaf2;
-                border: 8px solid #bc4749;
-                box-shadow: 20px 20px 0px #2b2d42;
-            }
-            .style-japanese .welcome-text {
-                color: #bc4749;
-                font-family: 'Noto Serif JP', serif;
-                border-bottom: 3px solid #2b2d42;
-            }
-            .style-japanese h3 {
-                font-family: 'Noto Serif JP', serif;
-            }
-            .style-japanese .style-options button,
-            .style-japanese .time-options button {
-                background-color: #fcfaf2;
-                color: #2b2d42;
-                border: 3px solid #bc4749;
-                font-family: 'Noto Serif JP', serif;
-                border-radius: 4px;
-                text-transform: uppercase;
-                font-weight: bold;
-            }
-            .style-japanese .style-options button.selected {
-                background-color: #bc4749;
-                color: #fcfaf2;
-                border-color: #2b2d42;
-            }
-            .style-japanese .time-options button:hover {
-                background-color: #bc4749;
-                color: #fcfaf2;
-                transform: scale(1.1);
-            }
-            .style-japanese .piece {
-                filter: drop-shadow(0 4px 5px rgba(0,0,0,0.3));
-            }
-            .style-japanese .piece:hover {
-                transform: scale(1.2) translateY(-10px);
-                filter: drop-shadow(0 15px 20px rgba(0,0,0,0.4));
-            }
-
-            /* Promotie Overlay */
-            .promotion-overlay {
-                position: absolute;
-                top: 0;
-                left: 0;
-                width: 100%;
-                height: 100%;
-                background-color: rgba(255, 255, 255, 0.8);
-                display: flex;
-                justify-content: center;
-                align-items: center;
-                z-index: 100;
-                gap: 15px;
-            }
-
-            .promotion-option {
-                width: 80px;
-                height: 80px;
-                background-color: #fff;
-                border: 5px solid #000;
-                display: flex;
-                justify-content: center;
-                align-items: center;
-                cursor: pointer;
-                transition: transform 0.2s;
-            }
-
-            .promotion-option:hover {
-                transform: scale(1.1);
-                background-color: #ffcc00;
-            }
-
-            .style-bauhaus .promotion-option {
-                box-shadow: 5px 5px 0px #0000ff;
-            }
-
-            .style-japanese .promotion-overlay {
-                background-color: rgba(252, 250, 242, 0.9);
-            }
-
-            .style-japanese .promotion-option {
-                border-color: #bc4749;
-                background-color: #fcfaf2;
-                box-shadow: 4px 4px 0px #2b2d42;
-            }
-
-            .style-japanese .promotion-option:hover {
-                background-color: #bc4749;
-            }
-        </style>
-    </head>
-    <body>
-
-    <div id="start-screen" class="overlay">
-        <div class="start-box">
-            <h2 class="welcome-text">WELKOM BIJ BAU-SCHAAK</h2>
-            
-            <h3>KIES STIJL</h3>
-            <div class="style-options">
-                <button id="btn-bauhaus" class="selected" onclick="selectStyle('bauhaus')">BAUHAUS</button>
-                <button id="btn-japanese" onclick="selectStyle('japanese')">JAPANS</button>
-            </div>
-
-            <h3>KIES TIJD</h3>
-            <div class="time-options">
-                <button onclick="startGame(1)">1 MIN</button>
-                <button onclick="startGame(3)">3 MIN</button>
-                <button onclick="startGame(5)">5 MIN</button>
-                <button onclick="startGame(10)">10 MIN</button>
-            </div>
+<div class="main-wrapper">
+    <div class="left-column panel" id="timer-zone">
+        <div id="scramble">Laden...</div>
+        <div id="timer-display">0.00</div>
+        <button class="btn-inspection" id="inspect-btn">START INSPECTIE</button>
+        <div class="stats-bar">
+            <div class="stat-item"><div class="stat-label">Best</div><div id="best">0.00</div></div>
+            <div class="stat-item"><div class="stat-label">Ao5</div><div id="ao5-main">-</div></div>
+            <div class="stat-item"><div class="stat-label">Solves</div><div id="total-count">0</div></div>
         </div>
+        <canvas id="timeChart"></canvas>
     </div>
 
-
-    <div class="main-container">
-        <div class="left-panel">
-            <div class="clocks-container">
-                <div id="black-clock" class="clock black-timer">
-                    <div class="clock-label">ZWART</div>
-                    <div id="black-time" class="time">10:00</div>
-                </div>
-                
-                <div id="white-clock" class="clock white-timer active">
-                    <div class="clock-label">WIT</div>
-                    <div id="white-time" class="time">10:00</div>
-                </div>
-            </div>
-        </div>
-
-        <div class="board-container">
-            <div id="chessboard"></div>
-            <div id="promotion-dialog" class="promotion-overlay" style="display: none;"></div>
-        </div>
-
-        <div class="right-panel">
-            <div id="move-history">
-                <div class="history-header">ZETNOTATIE</div>
-                <div id="moves-list"></div>
-            </div>
-        </div>
+    <div class="right-column panel">
+        <h3 style="margin-top:0; color: var(--cube-green); text-align: center;">SESSIE LOGS</h3>
+        <table>
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>Tijd</th>
+                    <th>Ao5</th>
+                    <th>Ao12</th>
+                    <th>Acties</th>
+                </tr>
+            </thead>
+            <tbody id="solve-list"></tbody>
+        </table>
     </div>
+</div>
 
-    <script src="chess.js"></script>
-    </body>
+<script>
+    let solves = JSON.parse(localStorage.getItem('cubeDataV7')) || [];
+    let chart;
+    let startTime, timerInterval, insInterval, isRunning = false, isReady = false, isInspecting = false;
+    
+    const display = document.getElementById('timer-display');
+    const inspectBtn = document.getElementById('inspect-btn');
+    const timerZone = document.getElementById('timer-zone');
+
+    function generateScramble() {
+        const moves = ["U", "D", "L", "R", "F", "B"];
+        const modifiers = ["", "'", "2"];
+        let scramble = [];
+        let lastMove = "";
+        for (let i = 0; i < 20; i++) {
+            let move = moves[Math.floor(Math.random() * moves.length)];
+            while (move === lastMove) move = moves[Math.floor(Math.random() * moves.length)];
+            scramble.push(move + modifiers[Math.floor(Math.random() * modifiers.length)]);
+            lastMove = move;
+        }
+        document.getElementById('scramble').innerText = scramble.join(" ");
+    }
+
+    function initChart() {
+        const ctx = document.getElementById('timeChart').getContext('2d');
+        chart = new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: solves.map((_, i) => i + 1),
+                datasets: [{
+                    label: 'Tijd',
+                    data: solves.map(s => s.dnf ? null : s.time),
+                    borderColor: '#0046AD',
+                    backgroundColor: 'rgba(0, 70, 173, 0.2)',
+                    tension: 0.3,
+                    fill: true,
+                    spanGaps: false
+                }]
+            },
+            options: { responsive: true, plugins: { legend: { display: false } } }
+        });
+        renderUI();
+        generateScramble();
+    }
+
+    // CORE TIMER LOGICA
+    function handleActionStart() {
+        if (isInspecting) {
+            isInspecting = false;
+            clearInterval(insInterval);
+            isReady = true;
+            display.innerText = "0.00";
+            display.classList.remove('inspection');
+            display.classList.add('timer-ready');
+        } else if (!isRunning && !isReady) {
+            isReady = true;
+            display.innerText = "0.00";
+            display.classList.add('timer-ready');
+        } else if (isRunning) {
+            stopTimer();
+        }
+    }
+
+    function handleActionEnd() {
+        if (isReady && !isRunning) {
+            startTimer();
+        }
+    }
+
+    // Luister naar Spatiebalk (Global)
+    window.addEventListener('keydown', (e) => {
+        if (e.code === 'Space') {
+            e.preventDefault(); 
+            handleActionStart();
+        }
+    });
+
+    window.addEventListener('keyup', (e) => {
+        if (e.code === 'Space') {
+            handleActionEnd();
+        }
+    });
+
+    // Luister naar Muis/Touch op de Timer Zone
+    timerZone.addEventListener('mousedown', (e) => {
+        if (e.target.tagName !== 'BUTTON') handleActionStart();
+    });
+    window.addEventListener('mouseup', handleActionEnd);
+
+    timerZone.addEventListener('touchstart', (e) => {
+        if (e.target.tagName !== 'BUTTON') {
+            e.preventDefault();
+            handleActionStart();
+        }
+    }, {passive: false});
+    window.addEventListener('touchend', handleActionEnd);
+
+    // Inspectie Knop
+    inspectBtn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        inspectBtn.blur(); // VERWIJDER FOCUS VAN DE KNOP (Cruciaal voor spatiebalk!)
+        startInspection();
+    });
+
+    function startInspection() {
+        if (isRunning || isInspecting) return;
+        isInspecting = true;
+        let count = 15;
+        display.classList.add('inspection');
+        display.classList.remove('timer-ready');
+        display.innerText = count;
+        insInterval = setInterval(() => {
+            count--;
+            if (count <= 0) {
+                clearInterval(insInterval);
+                if (isInspecting) startTimer();
+            } else { display.innerText = count; }
+        }, 1000);
+    }
+
+    function startTimer() {
+        isRunning = true; isReady = false; isInspecting = false;
+        display.classList.remove('timer-ready', 'inspection');
+        startTime = performance.now();
+        timerInterval = setInterval(() => {
+            display.innerText = ((performance.now() - startTime) / 1000).toFixed(2);
+        }, 10);
+    }
+
+    function stopTimer() {
+        isRunning = false;
+        clearInterval(timerInterval);
+        const finalTime = parseFloat(display.innerText);
+        solves.push({ time: finalTime, penalty: false, dnf: false });
+        saveAndRefresh();
+        generateScramble();
+    }
+
+    // Penalty & UI functies
+    function applyPenalty(index) {
+        if (!solves[index].penalty && !solves[index].dnf) {
+            solves[index].time += 2;
+            solves[index].penalty = true;
+            saveAndRefresh();
+        }
+    }
+
+    function applyDNF(index) {
+        if (!solves[index].dnf) {
+            solves[index].dnf = true;
+            saveAndRefresh();
+        }
+    }
+
+    function deleteSolve(index) {
+        solves.splice(index, 1);
+        saveAndRefresh();
+    }
+
+    function saveAndRefresh() {
+        localStorage.setItem('cubeDataV7', JSON.stringify(solves));
+        chart.data.labels = solves.map((_, i) => i + 1);
+        chart.data.datasets[0].data = solves.map(s => s.dnf ? null : s.time);
+        chart.update();
+        renderUI();
+    }
+
+    function calcAo(array, count, index) {
+        if (index + 1 < count) return "-";
+        const subset = array.slice(index + 1 - count, index + 1);
+        if (subset.some(s => s.dnf)) return "DNF";
+        const sum = subset.reduce((a, b) => a + b.time, 0);
+        return (sum / count).toFixed(2);
+    }
+
+    function renderUI() {
+        const listBody = document.getElementById('solve-list');
+        listBody.innerHTML = "";
+        solves.forEach((s, i) => {
+            const row = `<tr>
+                <td>${i + 1}</td>
+                <td style="font-weight:bold" class="${s.dnf ? 'is-dnf' : (s.penalty ? 'is-penalty' : '')}">
+                    ${s.dnf ? 'DNF' : s.time.toFixed(2) + (s.penalty ? '+' : '')}
+                </td>
+                <td>${calcAo(solves, 5, i)}</td>
+                <td>${calcAo(solves, 12, i)}</td>
+                <td class="action-btns">
+                    <button class="plus2-btn" onclick="event.stopPropagation(); applyPenalty(${i})" ${s.penalty || s.dnf ? 'disabled' : ''}>+2</button>
+                    <button class="dnf-btn" onclick="event.stopPropagation(); applyDNF(${i})" ${s.dnf ? 'disabled' : ''}>DNF</button>
+                    <button class="delete-btn" onclick="event.stopPropagation(); deleteSolve(${i})">×</button>
+                </td>
+            </tr>`;
+            listBody.insertAdjacentHTML('afterbegin', row);
+        });
+
+        const validTimes = solves.filter(s => !s.dnf).map(s => s.time);
+        if (validTimes.length > 0) {
+            document.getElementById('best').innerText = Math.min(...validTimes).toFixed(2) + "s";
+            document.getElementById('total-count').innerText = solves.length;
+            document.getElementById('ao5-main').innerText = calcAo(solves, 5, solves.length - 1);
+        }
+    }
+
+    initChart();
+</script>
+
+</body>
 </html>
