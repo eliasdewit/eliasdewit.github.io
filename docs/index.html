@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Rubik's Pro Timer online</title>
+    <title>Rubik's Pro Timer - Multi-Cube</title>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
         :root {
@@ -46,6 +46,30 @@
             border: 2px solid var(--cube-blue);
         }
 
+        /* Menu Styling */
+        .menu-bar {
+            width: 100%;
+            max-width: 1200px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+            background: var(--panel-bg);
+            padding: 10px 20px;
+            border-radius: 10px;
+            box-sizing: border-box;
+        }
+
+        select {
+            background: #333;
+            color: white;
+            border: 2px solid var(--cube-blue);
+            padding: 8px;
+            border-radius: 5px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
         .left-column { 
             flex: 2; 
             padding: 20px; 
@@ -75,65 +99,59 @@
             padding: 15px;
             background: rgba(0,0,0,0.4);
             border-radius: 10px;
-            min-height: 50px;
-            line-height: 1.4;
+            min-height: 60px;
         }
 
         #timer-display {
             font-family: 'Courier New', monospace;
             font-size: 80px;
             text-align: center;
-            margin: 30px 0;
+            margin: 20px 0;
             font-weight: bold;
         }
 
-        @media (min-width: 600px) { #timer-display { font-size: 120px; } }
-
-        .timer-ready { color: var(--cube-green) !important; text-shadow: 0 0 20px var(--cube-green); }
+        .timer-ready { color: var(--cube-green) !important; }
         .inspection { color: var(--cube-red); }
 
         .btn-inspection {
             background: var(--cube-white);
             color: black;
             border: none;
-            padding: 15px 30px;
+            padding: 12px 25px;
             border-radius: 8px;
             cursor: pointer;
             font-weight: bold;
             margin: 0 auto 20px;
-            font-size: 1.1em;
-            transition: transform 0.1s;
         }
-        .btn-inspection:active { transform: scale(0.95); }
 
         .stats-bar {
             display: flex;
             justify-content: space-around;
             background: #2a2a2a;
-            padding: 15px;
+            padding: 12px;
             border-radius: 10px;
             margin-bottom: 20px;
-            border-bottom: 4px solid var(--cube-yellow);
         }
 
-        .stat-label { font-size: 10px; color: #888; text-transform: uppercase; }
-
-        table { width: 100%; border-collapse: collapse; font-size: 0.9em; }
-        th { text-align: left; color: var(--cube-yellow); border-bottom: 2px solid #444; padding: 10px; }
-        td { padding: 12px 10px; border-bottom: 1px solid #333; }
-        
-        .action-btns { display: flex; gap: 5px; }
-        .plus2-btn { background: var(--cube-orange); border: none; color: white; padding: 5px 10px; border-radius: 4px; cursor: pointer; font-size: 0.8em; }
-        .dnf-btn { background: var(--cube-red); border: none; color: white; padding: 5px 10px; border-radius: 4px; cursor: pointer; font-size: 0.8em; }
-        .delete-btn { background: transparent; color: #666; border: none; cursor: pointer; font-size: 1.2em; padding-left: 10px; }
+        table { width: 100%; border-collapse: collapse; }
+        th { text-align: left; color: var(--cube-yellow); border-bottom: 2px solid #444; padding: 8px; }
+        td { padding: 10px 8px; border-bottom: 1px solid #333; }
         
         .is-dnf { color: var(--cube-red) !important; text-decoration: line-through; }
-        .is-penalty { color: var(--cube-orange) !important; }
-
-        canvas { background: #111; border-radius: 10px; padding: 10px; width: 100% !important; }
     </style>
 </head>
 <body>
+
+<div class="menu-bar panel">
+    <div style="font-weight: bold; color: var(--cube-yellow);">RUBIK'S PRO TIMER</div>
+    <select id="cube-type">
+        <option value="2x2">2x2 Cube</option>
+        <option value="3x3" selected>3x3 Cube</option>
+        <option value="4x4">4x4 Cube</option>
+        <option value="pyraminx">Pyraminx</option>
+        <option value="megaminx">Megaminx</option>
+    </select>
+</div>
 
 <div class="main-wrapper">
     <div class="left-column panel" id="timer-zone">
@@ -141,22 +159,21 @@
         <div id="timer-display">0.00</div>
         <button class="btn-inspection" id="inspect-btn">START INSPECTIE</button>
         <div class="stats-bar">
-            <div class="stat-item"><div class="stat-label">Best</div><div id="best">0.00</div></div>
-            <div class="stat-item"><div class="stat-label">Ao5</div><div id="ao5-main">-</div></div>
-            <div class="stat-item"><div class="stat-label">Solves</div><div id="total-count">0</div></div>
+            <div>Best: <span id="best">0.00</span></div>
+            <div>Ao5: <span id="ao5-main">-</span></div>
+            <div>Solves: <span id="total-count">0</span></div>
         </div>
         <canvas id="timeChart"></canvas>
     </div>
 
     <div class="right-column panel">
-        <h3 style="margin-top:0; color: var(--cube-green); text-align: center;">SESSIE LOGS</h3>
+        <h3 style="margin-top:0; color: var(--cube-green); text-align: center;">LOGS (<span id="current-cube-label">3x3</span>)</h3>
         <table>
             <thead>
                 <tr>
                     <th>#</th>
                     <th>Tijd</th>
                     <th>Ao5</th>
-                    <th>Ao12</th>
                     <th>Acties</th>
                 </tr>
             </thead>
@@ -166,62 +183,82 @@
 </div>
 
 <script>
-    let solves = JSON.parse(localStorage.getItem('cubeDataV7')) || [];
+    // Data opslag per kubus type
+    let allData = JSON.parse(localStorage.getItem('multiCubeData')) || {
+        "2x2": [], "3x3": [], "4x4": [], "pyraminx": [], "megaminx": []
+    };
+    
+    let currentType = "3x3";
     let chart;
     let startTime, timerInterval, insInterval, isRunning = false, isReady = false, isInspecting = false;
-    
+
     const display = document.getElementById('timer-display');
     const inspectBtn = document.getElementById('inspect-btn');
     const timerZone = document.getElementById('timer-zone');
+    const cubeSelect = document.getElementById('cube-type');
 
+    // SCRAMBLE GENERATOR
     function generateScramble() {
-        const moves = ["U", "D", "L", "R", "F", "B"];
+        const moves = {
+            "2x2": ["U", "R", "F"],
+            "3x3": ["U", "D", "L", "R", "F", "B"],
+            "4x4": ["U", "D", "L", "R", "F", "B", "Uw", "Dw", "Lw", "Rw", "Fw", "Bw"],
+            "pyraminx": ["U", "L", "R", "B"],
+            "megaminx": ["R++", "R--", "D++", "D--", "U"]
+        };
+        
+        const lengths = { "2x2": 9, "3x3": 20, "4x4": 40, "pyraminx": 10, "megaminx": 50 };
         const modifiers = ["", "'", "2"];
+        
+        let type = currentType;
         let scramble = [];
         let lastMove = "";
-        for (let i = 0; i < 20; i++) {
-            let move = moves[Math.floor(Math.random() * moves.length)];
-            while (move === lastMove) move = moves[Math.floor(Math.random() * moves.length)];
-            scramble.push(move + modifiers[Math.floor(Math.random() * modifiers.length)]);
-            lastMove = move;
+
+        if (type === "megaminx") {
+            for(let i=0; i<lengths[type]; i++) {
+                let move = moves[type][Math.floor(Math.random() * 4)];
+                if (i % 10 === 0 && i !== 0) scramble.push("U\n");
+                else scramble.push(move);
+            }
+        } else {
+            for (let i = 0; i < lengths[type]; i++) {
+                let move = moves[type][Math.floor(Math.random() * moves[type].length)];
+                while (move === lastMove) move = moves[type][Math.floor(Math.random() * moves[type].length)];
+                let mod = (type === "pyraminx" && Math.random() > 0.5) ? "" : modifiers[Math.floor(Math.random() * 3)];
+                scramble.push(move + mod);
+                lastMove = move;
+            }
         }
         document.getElementById('scramble').innerText = scramble.join(" ");
     }
+
+    // WISSELEN VAN KUBUS
+    cubeSelect.addEventListener('change', (e) => {
+        currentType = e.target.value;
+        document.getElementById('current-cube-label').innerText = currentType;
+        saveAndRefresh();
+        generateScramble();
+    });
 
     function initChart() {
         const ctx = document.getElementById('timeChart').getContext('2d');
         chart = new Chart(ctx, {
             type: 'line',
-            data: {
-                labels: solves.map((_, i) => i + 1),
-                datasets: [{
-                    label: 'Tijd',
-                    data: solves.map(s => s.dnf ? null : s.time),
-                    borderColor: '#0046AD',
-                    backgroundColor: 'rgba(0, 70, 173, 0.2)',
-                    tension: 0.3,
-                    fill: true,
-                    spanGaps: false
-                }]
-            },
+            data: { labels: [], datasets: [{ label: 'Tijd', data: [], borderColor: '#0046AD', tension: 0.3 }] },
             options: { responsive: true, plugins: { legend: { display: false } } }
         });
-        renderUI();
+        saveAndRefresh();
         generateScramble();
     }
 
-    // CORE TIMER LOGICA
+    // TIMER LOGICA (Spatie + Touch)
     function handleActionStart() {
         if (isInspecting) {
-            isInspecting = false;
-            clearInterval(insInterval);
-            isReady = true;
-            display.innerText = "0.00";
-            display.classList.remove('inspection');
+            isInspecting = false; clearInterval(insInterval);
+            isReady = true; display.innerText = "0.00";
             display.classList.add('timer-ready');
         } else if (!isRunning && !isReady) {
-            isReady = true;
-            display.innerText = "0.00";
+            isReady = true; display.innerText = "0.00";
             display.classList.add('timer-ready');
         } else if (isRunning) {
             stopTimer();
@@ -229,59 +266,26 @@
     }
 
     function handleActionEnd() {
-        if (isReady && !isRunning) {
-            startTimer();
-        }
+        if (isReady && !isRunning) startTimer();
     }
 
-    // Luister naar Spatiebalk (Global)
-    window.addEventListener('keydown', (e) => {
-        if (e.code === 'Space') {
-            e.preventDefault(); 
-            handleActionStart();
-        }
-    });
-
-    window.addEventListener('keyup', (e) => {
-        if (e.code === 'Space') {
-            handleActionEnd();
-        }
-    });
-
-    // Luister naar Muis/Touch op de Timer Zone
-    timerZone.addEventListener('mousedown', (e) => {
-        if (e.target.tagName !== 'BUTTON') handleActionStart();
-    });
+    window.addEventListener('keydown', (e) => { if (e.code === 'Space') { e.preventDefault(); handleActionStart(); } });
+    window.addEventListener('keyup', (e) => { if (e.code === 'Space') handleActionEnd(); });
+    timerZone.addEventListener('mousedown', (e) => { if (e.target.tagName !== 'BUTTON') handleActionStart(); });
     window.addEventListener('mouseup', handleActionEnd);
-
-    timerZone.addEventListener('touchstart', (e) => {
-        if (e.target.tagName !== 'BUTTON') {
-            e.preventDefault();
-            handleActionStart();
-        }
-    }, {passive: false});
+    timerZone.addEventListener('touchstart', (e) => { if (e.target.tagName !== 'BUTTON') { e.preventDefault(); handleActionStart(); } });
     window.addEventListener('touchend', handleActionEnd);
 
-    // Inspectie Knop
-    inspectBtn.addEventListener('click', (e) => {
-        e.stopPropagation();
-        inspectBtn.blur(); // VERWIJDER FOCUS VAN DE KNOP (Cruciaal voor spatiebalk!)
-        startInspection();
-    });
+    inspectBtn.onclick = (e) => { e.stopPropagation(); inspectBtn.blur(); startInspection(); };
 
     function startInspection() {
-        if (isRunning || isInspecting) return;
-        isInspecting = true;
-        let count = 15;
+        isInspecting = true; let count = 15;
         display.classList.add('inspection');
-        display.classList.remove('timer-ready');
         display.innerText = count;
         insInterval = setInterval(() => {
             count--;
-            if (count <= 0) {
-                clearInterval(insInterval);
-                if (isInspecting) startTimer();
-            } else { display.innerText = count; }
+            if (count <= 0) { clearInterval(insInterval); startTimer(); }
+            else display.innerText = count;
         }, 1000);
     }
 
@@ -295,77 +299,43 @@
     }
 
     function stopTimer() {
-        isRunning = false;
-        clearInterval(timerInterval);
-        const finalTime = parseFloat(display.innerText);
-        solves.push({ time: finalTime, penalty: false, dnf: false });
+        isRunning = false; clearInterval(timerInterval);
+        allData[currentType].push({ time: parseFloat(display.innerText), dnf: false });
         saveAndRefresh();
         generateScramble();
     }
 
-    // Penalty & UI functies
-    function applyPenalty(index) {
-        if (!solves[index].penalty && !solves[index].dnf) {
-            solves[index].time += 2;
-            solves[index].penalty = true;
-            saveAndRefresh();
-        }
-    }
-
-    function applyDNF(index) {
-        if (!solves[index].dnf) {
-            solves[index].dnf = true;
-            saveAndRefresh();
-        }
-    }
-
-    function deleteSolve(index) {
-        solves.splice(index, 1);
+    function deleteSolve(idx) {
+        allData[currentType].splice(idx, 1);
         saveAndRefresh();
     }
 
     function saveAndRefresh() {
-        localStorage.setItem('cubeDataV7', JSON.stringify(solves));
-        chart.data.labels = solves.map((_, i) => i + 1);
-        chart.data.datasets[0].data = solves.map(s => s.dnf ? null : s.time);
+        localStorage.setItem('multiCubeData', JSON.stringify(allData));
+        let currentSolves = allData[currentType];
+        
+        // Update Chart
+        chart.data.labels = currentSolves.map((_, i) => i + 1);
+        chart.data.datasets[0].data = currentSolves.map(s => s.time);
         chart.update();
-        renderUI();
-    }
 
-    function calcAo(array, count, index) {
-        if (index + 1 < count) return "-";
-        const subset = array.slice(index + 1 - count, index + 1);
-        if (subset.some(s => s.dnf)) return "DNF";
-        const sum = subset.reduce((a, b) => a + b.time, 0);
-        return (sum / count).toFixed(2);
-    }
-
-    function renderUI() {
+        // Update List
         const listBody = document.getElementById('solve-list');
         listBody.innerHTML = "";
-        solves.forEach((s, i) => {
+        currentSolves.forEach((s, i) => {
             const row = `<tr>
                 <td>${i + 1}</td>
-                <td style="font-weight:bold" class="${s.dnf ? 'is-dnf' : (s.penalty ? 'is-penalty' : '')}">
-                    ${s.dnf ? 'DNF' : s.time.toFixed(2) + (s.penalty ? '+' : '')}
-                </td>
-                <td>${calcAo(solves, 5, i)}</td>
-                <td>${calcAo(solves, 12, i)}</td>
-                <td class="action-btns">
-                    <button class="plus2-btn" onclick="event.stopPropagation(); applyPenalty(${i})" ${s.penalty || s.dnf ? 'disabled' : ''}>+2</button>
-                    <button class="dnf-btn" onclick="event.stopPropagation(); applyDNF(${i})" ${s.dnf ? 'disabled' : ''}>DNF</button>
-                    <button class="delete-btn" onclick="event.stopPropagation(); deleteSolve(${i})">×</button>
-                </td>
+                <td>${s.time.toFixed(2)}</td>
+                <td>-</td>
+                <td><button onclick="deleteSolve(${i})">×</button></td>
             </tr>`;
             listBody.insertAdjacentHTML('afterbegin', row);
         });
 
-        const validTimes = solves.filter(s => !s.dnf).map(s => s.time);
-        if (validTimes.length > 0) {
-            document.getElementById('best').innerText = Math.min(...validTimes).toFixed(2) + "s";
-            document.getElementById('total-count').innerText = solves.length;
-            document.getElementById('ao5-main').innerText = calcAo(solves, 5, solves.length - 1);
-        }
+        // Stats
+        const times = currentSolves.map(s => s.time);
+        document.getElementById('best').innerText = times.length ? Math.min(...times).toFixed(2) : "0.00";
+        document.getElementById('total-count').innerText = times.length;
     }
 
     initChart();
