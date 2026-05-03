@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Rubik's Pro Timer - Multi-Cube</title>
+    <title>Rubik's Pro Timer - DNF & +2 Support</title>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
         :root {
@@ -46,7 +46,6 @@
             border: 2px solid var(--cube-blue);
         }
 
-        /* Menu Styling */
         .menu-bar {
             width: 100%;
             max-width: 1200px;
@@ -58,6 +57,7 @@
             padding: 10px 20px;
             border-radius: 10px;
             box-sizing: border-box;
+            border-bottom: 3px solid var(--cube-blue);
         }
 
         select {
@@ -81,17 +81,17 @@
         }
 
         .right-column { 
-            flex: 1; 
+            flex: 1.2; 
             padding: 20px; 
-            max-height: 400px; 
+            max-height: 450px; 
             overflow-y: auto; 
             border-top: 8px solid var(--cube-green); 
         }
 
-        @media (min-width: 900px) { .right-column { max-height: 85vh; } }
+        @media (min-width: 900px) { .right-column { max-height: 80vh; } }
 
         #scramble {
-            font-size: 1.1em;
+            font-size: 1em;
             text-align: center;
             color: var(--cube-yellow);
             font-weight: bold;
@@ -99,7 +99,8 @@
             padding: 15px;
             background: rgba(0,0,0,0.4);
             border-radius: 10px;
-            min-height: 60px;
+            min-height: 50px;
+            line-height: 1.4;
         }
 
         #timer-display {
@@ -108,9 +109,12 @@
             text-align: center;
             margin: 20px 0;
             font-weight: bold;
+            transition: color 0.1s;
         }
 
-        .timer-ready { color: var(--cube-green) !important; }
+        @media (min-width: 600px) { #timer-display { font-size: 110px; } }
+
+        .timer-ready { color: var(--cube-green) !important; text-shadow: 0 0 15px var(--cube-green); }
         .inspection { color: var(--cube-red); }
 
         .btn-inspection {
@@ -122,28 +126,38 @@
             cursor: pointer;
             font-weight: bold;
             margin: 0 auto 20px;
+            text-transform: uppercase;
         }
 
         .stats-bar {
             display: flex;
             justify-content: space-around;
             background: #2a2a2a;
-            padding: 12px;
+            padding: 15px;
             border-radius: 10px;
             margin-bottom: 20px;
+            border-bottom: 3px solid var(--cube-yellow);
         }
 
-        table { width: 100%; border-collapse: collapse; }
-        th { text-align: left; color: var(--cube-yellow); border-bottom: 2px solid #444; padding: 8px; }
-        td { padding: 10px 8px; border-bottom: 1px solid #333; }
+        .stat-val { font-weight: bold; color: var(--cube-yellow); }
+
+        table { width: 100%; border-collapse: collapse; font-size: 0.9em; }
+        th { text-align: left; color: var(--cube-yellow); border-bottom: 2px solid #444; padding: 10px; }
+        td { padding: 10px; border-bottom: 1px solid #333; }
         
+        .action-btns { display: flex; gap: 4px; }
+        .plus2-btn { background: var(--cube-orange); border: none; color: white; padding: 4px 8px; border-radius: 4px; cursor: pointer; font-size: 0.8em; }
+        .dnf-btn { background: var(--cube-red); border: none; color: white; padding: 4px 8px; border-radius: 4px; cursor: pointer; font-size: 0.8em; }
+        .del-btn { background: #444; border: none; color: white; padding: 4px 8px; border-radius: 4px; cursor: pointer; font-size: 0.8em; }
+
         .is-dnf { color: var(--cube-red) !important; text-decoration: line-through; }
+        .is-penalty { color: var(--cube-orange) !important; }
     </style>
 </head>
 <body>
 
 <div class="menu-bar panel">
-    <div style="font-weight: bold; color: var(--cube-yellow);">RUBIK'S PRO TIMER</div>
+    <div style="font-weight: bold; color: var(--cube-yellow); letter-spacing: 1px;">RUBIK'S PRO</div>
     <select id="cube-type">
         <option value="2x2">2x2 Cube</option>
         <option value="3x3" selected>3x3 Cube</option>
@@ -157,23 +171,22 @@
     <div class="left-column panel" id="timer-zone">
         <div id="scramble">Laden...</div>
         <div id="timer-display">0.00</div>
-        <button class="btn-inspection" id="inspect-btn">START INSPECTIE</button>
+        <button class="btn-inspection" id="inspect-btn">Start Inspectie</button>
         <div class="stats-bar">
-            <div>Best: <span id="best">0.00</span></div>
-            <div>Ao5: <span id="ao5-main">-</span></div>
-            <div>Solves: <span id="total-count">0</span></div>
+            <div>Best: <span id="best" class="stat-val">0.00</span></div>
+            <div>Ao5: <span id="ao5-main" class="stat-val">-</span></div>
+            <div>Solves: <span id="total-count" class="stat-val">0</span></div>
         </div>
-        <canvas id="timeChart"></canvas>
+        <canvas id="timeChart" style="max-height: 200px;"></canvas>
     </div>
 
     <div class="right-column panel">
-        <h3 style="margin-top:0; color: var(--cube-green); text-align: center;">LOGS (<span id="current-cube-label">3x3</span>)</h3>
+        <h3 style="margin-top:0; color: var(--cube-green); text-align: center;">SESSIE LOGS</h3>
         <table>
             <thead>
                 <tr>
                     <th>#</th>
                     <th>Tijd</th>
-                    <th>Ao5</th>
                     <th>Acties</th>
                 </tr>
             </thead>
@@ -183,8 +196,7 @@
 </div>
 
 <script>
-    // Data opslag per kubus type
-    let allData = JSON.parse(localStorage.getItem('multiCubeData')) || {
+    let allData = JSON.parse(localStorage.getItem('multiCubeDataV2')) || {
         "2x2": [], "3x3": [], "4x4": [], "pyraminx": [], "megaminx": []
     };
     
@@ -197,45 +209,36 @@
     const timerZone = document.getElementById('timer-zone');
     const cubeSelect = document.getElementById('cube-type');
 
-    // SCRAMBLE GENERATOR
     function generateScramble() {
         const moves = {
             "2x2": ["U", "R", "F"],
             "3x3": ["U", "D", "L", "R", "F", "B"],
             "4x4": ["U", "D", "L", "R", "F", "B", "Uw", "Dw", "Lw", "Rw", "Fw", "Bw"],
             "pyraminx": ["U", "L", "R", "B"],
-            "megaminx": ["R++", "R--", "D++", "D--", "U"]
+            "megaminx": ["R++", "R--", "D++", "D--", "U", "U'"]
         };
-        
-        const lengths = { "2x2": 9, "3x3": 20, "4x4": 40, "pyraminx": 10, "megaminx": 50 };
+        const lengths = { "2x2": 9, "3x3": 20, "4x4": 40, "pyraminx": 12, "megaminx": 40 };
         const modifiers = ["", "'", "2"];
         
-        let type = currentType;
         let scramble = [];
         let lastMove = "";
 
-        if (type === "megaminx") {
-            for(let i=0; i<lengths[type]; i++) {
-                let move = moves[type][Math.floor(Math.random() * 4)];
-                if (i % 10 === 0 && i !== 0) scramble.push("U\n");
-                else scramble.push(move);
-            }
-        } else {
-            for (let i = 0; i < lengths[type]; i++) {
-                let move = moves[type][Math.floor(Math.random() * moves[type].length)];
-                while (move === lastMove) move = moves[type][Math.floor(Math.random() * moves[type].length)];
-                let mod = (type === "pyraminx" && Math.random() > 0.5) ? "" : modifiers[Math.floor(Math.random() * 3)];
-                scramble.push(move + mod);
-                lastMove = move;
-            }
+        for (let i = 0; i < lengths[currentType]; i++) {
+            let pool = moves[currentType];
+            let move = pool[Math.floor(Math.random() * pool.length)];
+            while (move === lastMove) move = pool[Math.floor(Math.random() * pool.length)];
+            
+            let mod = (currentType === "megaminx" || currentType === "pyraminx" && Math.random() > 0.7) 
+                      ? "" : modifiers[Math.floor(Math.random() * 3)];
+            
+            scramble.push(move + mod);
+            lastMove = move;
         }
         document.getElementById('scramble').innerText = scramble.join(" ");
     }
 
-    // WISSELEN VAN KUBUS
     cubeSelect.addEventListener('change', (e) => {
         currentType = e.target.value;
-        document.getElementById('current-cube-label').innerText = currentType;
         saveAndRefresh();
         generateScramble();
     });
@@ -244,18 +247,18 @@
         const ctx = document.getElementById('timeChart').getContext('2d');
         chart = new Chart(ctx, {
             type: 'line',
-            data: { labels: [], datasets: [{ label: 'Tijd', data: [], borderColor: '#0046AD', tension: 0.3 }] },
-            options: { responsive: true, plugins: { legend: { display: false } } }
+            data: { labels: [], datasets: [{ label: 'Tijd', data: [], borderColor: '#0046AD', backgroundColor: 'rgba(0, 70, 173, 0.1)', fill: true, tension: 0.3 }] },
+            options: { responsive: true, plugins: { legend: { display: false } }, scales: { y: { beginAtZero: false } } }
         });
         saveAndRefresh();
         generateScramble();
     }
 
-    // TIMER LOGICA (Spatie + Touch)
     function handleActionStart() {
         if (isInspecting) {
             isInspecting = false; clearInterval(insInterval);
             isReady = true; display.innerText = "0.00";
+            display.classList.remove('inspection');
             display.classList.add('timer-ready');
         } else if (!isRunning && !isReady) {
             isReady = true; display.innerText = "0.00";
@@ -269,17 +272,20 @@
         if (isReady && !isRunning) startTimer();
     }
 
+    // Input Listeners
     window.addEventListener('keydown', (e) => { if (e.code === 'Space') { e.preventDefault(); handleActionStart(); } });
     window.addEventListener('keyup', (e) => { if (e.code === 'Space') handleActionEnd(); });
     timerZone.addEventListener('mousedown', (e) => { if (e.target.tagName !== 'BUTTON') handleActionStart(); });
     window.addEventListener('mouseup', handleActionEnd);
-    timerZone.addEventListener('touchstart', (e) => { if (e.target.tagName !== 'BUTTON') { e.preventDefault(); handleActionStart(); } });
+    timerZone.addEventListener('touchstart', (e) => { if (e.target.tagName !== 'BUTTON') { e.preventDefault(); handleActionStart(); } }, {passive: false});
     window.addEventListener('touchend', handleActionEnd);
 
     inspectBtn.onclick = (e) => { e.stopPropagation(); inspectBtn.blur(); startInspection(); };
 
     function startInspection() {
+        if (isRunning || isInspecting) return;
         isInspecting = true; let count = 15;
+        display.classList.remove('timer-ready');
         display.classList.add('inspection');
         display.innerText = count;
         insInterval = setInterval(() => {
@@ -300,9 +306,25 @@
 
     function stopTimer() {
         isRunning = false; clearInterval(timerInterval);
-        allData[currentType].push({ time: parseFloat(display.innerText), dnf: false });
+        const timeVal = parseFloat(display.innerText);
+        allData[currentType].push({ time: timeVal, dnf: false, plus2: false });
         saveAndRefresh();
         generateScramble();
+    }
+
+    // PENALTY LOGICA
+    function togglePlus2(idx) {
+        let solve = allData[currentType][idx];
+        if (!solve.dnf) {
+            solve.plus2 = !solve.plus2;
+            solve.time = solve.plus2 ? solve.time + 2 : solve.time - 2;
+            saveAndRefresh();
+        }
+    }
+
+    function toggleDNF(idx) {
+        allData[currentType][idx].dnf = !allData[currentType][idx].dnf;
+        saveAndRefresh();
     }
 
     function deleteSolve(idx) {
@@ -311,31 +333,51 @@
     }
 
     function saveAndRefresh() {
-        localStorage.setItem('multiCubeData', JSON.stringify(allData));
-        let currentSolves = allData[currentType];
+        localStorage.setItem('multiCubeDataV2', JSON.stringify(allData));
+        const currentSolves = allData[currentType];
         
-        // Update Chart
+        // Grafiek update
         chart.data.labels = currentSolves.map((_, i) => i + 1);
-        chart.data.datasets[0].data = currentSolves.map(s => s.time);
+        chart.data.datasets[0].data = currentSolves.map(s => s.dnf ? null : s.time);
         chart.update();
 
-        // Update List
+        // Lijst update
         const listBody = document.getElementById('solve-list');
         listBody.innerHTML = "";
         currentSolves.forEach((s, i) => {
+            const timeClass = s.dnf ? 'is-dnf' : (s.plus2 ? 'is-penalty' : '');
+            const timeDisplay = s.dnf ? 'DNF' : s.time.toFixed(2) + (s.plus2 ? '+' : '');
+            
             const row = `<tr>
                 <td>${i + 1}</td>
-                <td>${s.time.toFixed(2)}</td>
-                <td>-</td>
-                <td><button onclick="deleteSolve(${i})">×</button></td>
+                <td class="${timeClass}" style="font-weight:bold; font-size: 1.1em;">${timeDisplay}</td>
+                <td class="action-btns">
+                    <button class="plus2-btn" onclick="togglePlus2(${i})">+2</button>
+                    <button class="dnf-btn" onclick="toggleDNF(${i})">DNF</button>
+                    <button class="del-btn" onclick="deleteSolve(${i})">×</button>
+                </td>
             </tr>`;
             listBody.insertAdjacentHTML('afterbegin', row);
         });
 
-        // Stats
-        const times = currentSolves.map(s => s.time);
-        document.getElementById('best').innerText = times.length ? Math.min(...times).toFixed(2) : "0.00";
-        document.getElementById('total-count').innerText = times.length;
+        // Statistieken
+        const validTimes = currentSolves.filter(s => !s.dnf).map(s => s.time);
+        document.getElementById('best').innerText = validTimes.length ? Math.min(...validTimes).toFixed(2) : "0.00";
+        document.getElementById('total-count').innerText = currentSolves.length;
+        
+        // Ao5 Berekening
+        if (currentSolves.length >= 5) {
+            const last5 = currentSolves.slice(-5);
+            if (last5.filter(s => s.dnf).length > 1) {
+                document.getElementById('ao5-main').innerText = "DNF";
+            } else {
+                const sorted = last5.map(s => s.dnf ? 99999 : s.time).sort((a, b) => a - b);
+                const avg = (sorted[1] + sorted[2] + sorted[3]) / 3;
+                document.getElementById('ao5-main').innerText = avg.toFixed(2);
+            }
+        } else {
+            document.getElementById('ao5-main').innerText = "-";
+        }
     }
 
     initChart();
